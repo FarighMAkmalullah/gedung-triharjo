@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:penyewaan_gedung_triharjo/screen/splash_screen/splash_screen.dart';
 
 void main() {
   runApp(
@@ -11,32 +12,11 @@ class GedungTriharjo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        backgroundColor: Color(0xFF4472EB),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'GTR',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 64,
-                ),
-              ),
-              Text(
-                'Gedung Triharjo',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashScreen(),
+      },
     );
   }
 }
