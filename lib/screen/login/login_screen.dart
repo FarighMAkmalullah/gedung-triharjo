@@ -11,6 +11,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -36,6 +37,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       const Text(
                         'Login ke akun Anda',
+                        style: TextStyle(
+                          color: Color(0xFF7E7777),
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       TextFormField(
                         decoration: const InputDecoration(
@@ -47,16 +53,30 @@ class _LoginScreenState extends State<LoginScreen> {
                           labelText: 'Password',
                         ),
                       ),
-                      FractionallySizedBox(
-                        widthFactor: 1.0,
-                        child: ElevatedButton(
-                            onPressed: () {}, child: const Text('Login')),
+                      SizedBox(
+                        height: 50,
+                        child: FractionallySizedBox(
+                          widthFactor: 1.0,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF162D68),
+                            ),
+                            onPressed: () {},
+                            child: const Text('Login'),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const Text(
-                  'Atau login dengan',
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Text(
+                    'Atau login dengan',
+                    style: TextStyle(
+                      color: Color(0xFF8A8585),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 50,
@@ -97,8 +117,27 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Column(
               children: [
-                Text('Belum punya akun?'),
-                Text('Register disini'),
+                const Text(
+                  'Belum punya akun?',
+                  style: TextStyle(
+                    color: Color(0xFF8A8585),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/register');
+                  },
+                  child: const Text(
+                    'Register disini',
+                    style: TextStyle(
+                      color: Color(0xFF4472EB),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                )
               ],
             )
           ],
