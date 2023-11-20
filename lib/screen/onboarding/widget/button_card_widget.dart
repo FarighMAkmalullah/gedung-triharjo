@@ -21,7 +21,11 @@ class ButtonCardWidget extends StatelessWidget {
             backgroundColor: Colors.white,
             elevation: 0,
           ),
-          onPressed: () {},
+          onPressed: () {
+            if (namaButton == 'Login') {
+              Navigator.pushNamed(context, '/login');
+            }
+          },
           child: Row(
             children: [
               Image.asset(

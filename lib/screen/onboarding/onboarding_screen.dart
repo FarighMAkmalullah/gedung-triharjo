@@ -70,7 +70,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 namaButton: 'Sign In with Google',
               ),
               const SizedBox(
-                height: 70,
+                height: 120,
               ),
               const Center(
                 child: Text(
@@ -83,12 +83,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               const SizedBox(
                 height: 5,
               ),
-              const Center(
-                child: Text(
-                  'Register disini',
-                  style: TextStyle(
-                    color: Color(0xFFF9D16B),
-                    fontWeight: FontWeight.bold,
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/register');
+                },
+                child: const Center(
+                  child: Text(
+                    'Register disini',
+                    style: TextStyle(
+                      color: Color(0xFFF9D16B),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

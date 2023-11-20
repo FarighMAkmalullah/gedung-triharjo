@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:penyewaan_gedung_triharjo/screen/login/login_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/onboarding/onboarding_screen.dart';
+import 'package:penyewaan_gedung_triharjo/screen/register/register_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/splash_screen/splash_screen.dart';
 
 void main() {
@@ -18,6 +20,8 @@ class GedungTriharjo extends StatelessWidget {
       routes: {
         '/': (context) => const SplashScreen(),
         '/onboarding': (context) => const OnBoardingScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
       },
     );
   }
