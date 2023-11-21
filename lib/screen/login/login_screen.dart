@@ -8,6 +8,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,15 +45,33 @@ class _LoginScreenState extends State<LoginScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                        ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Password',
+                        controller: emailController,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide:
+                                  const BorderSide(color: Color(0xFF7E7777))),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: passwordController,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       SizedBox(
                         height: 50,
@@ -118,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Column(
               children: [
                 const Text(
-                  'Belum punya akun?',
+                  'Belum punya akun ?',
                   style: TextStyle(
                     color: Color(0xFF8A8585),
                   ),
