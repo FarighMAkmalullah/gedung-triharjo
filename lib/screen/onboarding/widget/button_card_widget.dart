@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class ButtonCardWidget extends StatelessWidget {
+  Color color;
+  Color colorName;
   String iconAsset;
   String namaButton;
   ButtonCardWidget({
     super.key,
+    required this.color,
+    required this.colorName,
     required this.iconAsset,
     required this.namaButton,
   });
@@ -18,7 +22,7 @@ class ButtonCardWidget extends StatelessWidget {
         widthFactor: 1.0,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
+            backgroundColor: color,
             elevation: 0,
           ),
           onPressed: () {
@@ -37,7 +41,9 @@ class ButtonCardWidget extends StatelessWidget {
               ),
               Text(
                 namaButton,
-                style: const TextStyle(color: Colors.black),
+                style: TextStyle(
+                  color: colorName,
+                ),
               )
             ],
           ),

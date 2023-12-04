@@ -12,7 +12,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF4472EB),
+      backgroundColor: Colors.black,
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -59,6 +59,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 height: 50,
               ),
               ButtonCardWidget(
+                color: const Color(0xFF4472EB),
+                colorName: Colors.white,
                 iconAsset: 'assets/icon/onboarding/login.png',
                 namaButton: 'Login',
               ),
@@ -66,6 +68,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 height: 15,
               ),
               ButtonCardWidget(
+                color: Colors.white,
+                colorName: Colors.black,
                 iconAsset: 'assets/icon/onboarding/google.png',
                 namaButton: 'Sign In with Google',
               ),
