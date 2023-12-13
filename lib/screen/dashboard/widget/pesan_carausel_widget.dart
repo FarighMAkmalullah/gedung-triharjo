@@ -26,8 +26,8 @@ class _PesanCarauselWidgetState extends State<PesanCarauselWidget> {
   };
   @override
   Widget build(BuildContext context) {
-    var list = carouselList?['carousel'];
-    return Container(
+    var list = carouselList['carousel'];
+    return SizedBox(
       height: 220,
       width: MediaQuery.of(context).size.width,
       child: ListView.builder(
@@ -83,6 +83,9 @@ class _PesanCarauselWidgetState extends State<PesanCarauselWidget> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,
                           elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                         child: const Text(
                           'Pesan Sekarang',

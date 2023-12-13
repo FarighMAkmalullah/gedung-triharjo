@@ -12,7 +12,7 @@ class ProfilGedungWidget extends StatefulWidget {
 
 class _ProfilGedungWidgetState extends State<ProfilGedungWidget> {
   final _pageController = PageController();
-  List<String> imageUrls = [
+  List<String> imageProfil = [
     "assets/image/dashboard/dashboard1.png",
     "assets/image/dashboard/dashboard2.png",
     "assets/image/dashboard/dashboard3.png",
@@ -25,7 +25,7 @@ class _ProfilGedungWidgetState extends State<ProfilGedungWidget> {
     super.initState();
 
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      if (_currentPage < imageUrls.length - 1) {
+      if (_currentPage < imageProfil.length - 1) {
         _currentPage++;
       } else {
         _currentPage = 0;
@@ -62,12 +62,12 @@ class _ProfilGedungWidgetState extends State<ProfilGedungWidget> {
           width: double.infinity,
           child: PageView(
             controller: _pageController,
-            children: imageUrls.map(
-              (imageUrl) {
+            children: imageProfil.map(
+              (imageProfil) {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(10.0),
                   child: Image.asset(
-                    imageUrl,
+                    imageProfil,
                     fit: BoxFit.cover,
                     height: 150,
                   ),
@@ -95,7 +95,7 @@ class _ProfilGedungWidgetState extends State<ProfilGedungWidget> {
                   ),
                   SmoothPageIndicator(
                     controller: _pageController,
-                    count: imageUrls.length,
+                    count: imageProfil.length,
                     effect: const ExpandingDotsEffect(
                       activeDotColor: Colors.white,
                       dotColor: Colors.white,
