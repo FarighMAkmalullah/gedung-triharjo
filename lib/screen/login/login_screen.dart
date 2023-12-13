@@ -13,153 +13,185 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF0F2F6),
       resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 200,
-                  child: const Center(
-                    child: Text(
-                      'GTR',
-                      style: TextStyle(
-                        fontSize: 60,
-                      ),
-                    ),
-                  ),
+            Container(
+              padding: const EdgeInsets.only(
+                bottom: 20,
+              ),
+              width: MediaQuery.of(context).size.width,
+              decoration: const BoxDecoration(
+                color: Color(0xFF4472EB),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
                 ),
-                Form(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Login ke akun Anda',
-                        style: TextStyle(
-                          color: Color(0xFF7E7777),
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        controller: emailController,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide:
-                                  const BorderSide(color: Color(0xFF7E7777))),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        controller: passwordController,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        height: 50,
-                        child: FractionallySizedBox(
-                          widthFactor: 1.0,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF162D68),
-                            ),
-                            onPressed: () {},
-                            child: const Text('Login'),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Text(
-                    'Atau login dengan',
-                    style: TextStyle(
-                      color: Color(0xFF8A8585),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 50,
-                  child: FractionallySizedBox(
-                    widthFactor: 1.0,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          side: const BorderSide(
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/icon/onboarding/google.png',
-                            height: 25,
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          const Text(
-                            'Sign In with Google',
-                            style: TextStyle(color: Colors.black),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                const Text(
-                  'Belum punya akun ?',
+              ),
+              height: 160,
+              child: const Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  'GTR',
                   style: TextStyle(
-                    color: Color(0xFF8A8585),
+                    fontSize: 45,
+                    color: Colors.white,
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/register');
-                  },
-                  child: const Text(
-                    'Register disini',
-                    style: TextStyle(
-                      color: Color(0xFF4472EB),
-                      fontWeight: FontWeight.bold,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
+              child: Column(
+                children: [
+                  Form(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Login ke akun Anda',
+                          style: TextStyle(
+                            color: Color(0xFF7E7777),
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        TextFormField(
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            filled: true,
+                            fillColor: Colors.white,
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        TextFormField(
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            filled: true,
+                            fillColor: Colors.white,
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: FractionallySizedBox(
+                            widthFactor: 1.0,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF162D68),
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                  side: const BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {},
+                              child: const Text('Login'),
+                            ),
+                          ),
+                        ),
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 20),
+                            child: Text(
+                              'Atau login dengan',
+                              style: TextStyle(
+                                color: Color(0xFF8A8585),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: FractionallySizedBox(
+                            widthFactor: 1.0,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                  side: const BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {},
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/icon/onboarding/google.png',
+                                    height: 25,
+                                  ),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  const Text(
+                                    'Sign In with Google',
+                                    style: TextStyle(color: Colors.black),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                )
-              ],
-            )
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      const Text(
+                        'Belum punya akun ?',
+                        style: TextStyle(
+                          color: Color(0xFF8A8585),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, '/register');
+                        },
+                        child: const Text(
+                          'Register disini',
+                          style: TextStyle(
+                            color: Color(0xFF4472EB),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
