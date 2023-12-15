@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   smooth_page_indicator: ^1.1.0
   cached_network_image: ^3.3.0
+  url_launcher: ^6.1.14
 
 dev_dependencies:
   flutter_test:
@@ -69,8 +70,12 @@ flutter:
     - assets/image/dashboard/aula.png
     - assets/image/dashboard/gedung.png
     - assets/image/dashboard/lapangan.png
+    - assets/image/dashboard/article.png
     - assets/icon/onboarding/google.png
     - assets/icon/onboarding/login.png
+    - assets/icon/profil/logout.png
+    - assets/icon/profil/edit.png
+    - assets/icon/history/purchase.png
     - assets/icon/bottom_bar/home.png
     - assets/icon/bottom_bar/user.png
     - assets/icon/bottom_bar/history.png

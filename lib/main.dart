@@ -19,7 +19,7 @@ class GedungTriharjo extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => const BottomBar(),
+        '/': (context) => const BottomBar(indexPage: 0),
         '/onboarding': (context) => const OnBoardingScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),

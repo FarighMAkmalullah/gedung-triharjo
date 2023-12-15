@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:penyewaan_gedung_triharjo/screen/dashboard/dashboard_screen.dart';
+import 'package:penyewaan_gedung_triharjo/screen/history/history_screen.dart';
+import 'package:penyewaan_gedung_triharjo/screen/profil/profil_screen.dart';
 
 class BottomBar extends StatefulWidget {
-  const BottomBar({super.key});
+  final int indexPage;
+  const BottomBar({
+    super.key,
+    required this.indexPage,
+  });
 
   @override
   State<BottomBar> createState() => _BottomBarState();
 }
 
 class _BottomBarState extends State<BottomBar> {
-  int currentIndex = 0;
+  late int currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.indexPage;
+  }
 
   List<Widget> children = [
     const DashboardScreen(),
-    const Center(
-      child: Text('History'),
-    ),
-    const Center(
-      child: Text('User'),
-    ),
+    const HistoryScreen(),
+    const ProfilScreen(),
   ];
 
   void onTabTapped(int index) {
