@@ -25,6 +25,8 @@ class FormPilihan1Widget extends StatefulWidget {
 class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
   late Event eventData;
 
+  bool isLoading = false;
+
   DateTimeRange? selectedDateRange;
   @override
   void initState() {
@@ -70,6 +72,9 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
   String selectedBank = 'BRI';
 
   Future<void> makePemesanan() async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       var res = await AddPemesananService().pemesananAdd(
         idEvent: eventData.idEvent,
@@ -81,25 +86,35 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
 
       if (res.containsKey('result') && res != null) {
         Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailPembayaranScreen(
-                vaNumber: res["result"]["va_number"],
-                expiryTime: res["result"]["expiry_time"],
-                bookingCode: res["result"]["bookingCode"],
-                totalPembayaran: "${res["result"]["totalPembayaran"]}",
-              ),
-            ));
-      } else if (res.containsKey('result') && res != null) {
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailPembayaranScreen(
+              vaNumber: res["result"]["va_number"],
+              expiryTime: res["result"]["expiry_time"],
+              bookingCode: res["result"]["bookingCode"],
+              totalPembayaran: "${res["result"]["totalPembayaran"]}",
+            ),
+          ),
+        );
+
+        setState(() {
+          isLoading = false;
+        });
+      } else if (res.containsKey('error') && res != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
           res['error'],
           style: const TextStyle(color: Colors.white),
         )));
-      }
 
+        log('Error during pemesanan: ${res['error']}');
+        setState(() {
+          isLoading = false;
+        });
+      }
       log('Pemesanan berhasil dilakukan!');
       log('Response: $res');
+      log('Jumlah Hari $numberOfDays');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
@@ -107,6 +122,9 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
         style: const TextStyle(color: Colors.white),
       )));
       log('Error during pemesanan: $e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -179,7 +197,6 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
           height: 20,
         ),
         DropdownButtonFormField(
-          // controller: passwordController,
           value: selectedBank,
           items: optionsBank.map((String option) {
             return DropdownMenuItem(
@@ -218,9 +235,11 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
               style: ElevatedButton.styleFrom(
                 elevation: 0,
               ),
-              child: const Text(
-                'Pilih Tanggal',
-              ),
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text(
+                      'Pilih Tanggal',
+                    ),
             ),
           ),
         ),
