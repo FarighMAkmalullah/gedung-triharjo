@@ -1,4 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
+import 'package:penyewaan_gedung_triharjo/service/login.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,6 +16,16 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+  bool isTextVisible = false;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +78,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         TextFormField(
                           controller: emailController,
+                          validator: (email) {
+                            if (email != null &&
+                                !EmailValidator.validate(email)) {
+                              return 'Enter a valid email';
+                            } else {
+                              return null;
+                            }
+                          },
                           decoration: InputDecoration(
                             labelText: 'Email',
                             filled: true,
@@ -78,7 +102,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         TextFormField(
                           controller: passwordController,
+                          validator: (value) {
+                            if (value != null && value.length < 5) {
+                              return 'Enter min. 5 characters';
+                            } else {
+                              return null;
+                            }
+                          },
+                          obscureText: isTextVisible,
                           decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isTextVisible = !isTextVisible;
+                                  });
+                                },
+                                icon: isTextVisible
+                                    ? const Icon(Icons.visibility)
+                                    : const Icon(Icons.visibility_off)),
                             labelText: 'Password',
                             filled: true,
                             fillColor: Colors.white,
@@ -107,8 +148,60 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                               ),
-                              onPressed: () {},
-                              child: const Text('Login'),
+                              onPressed: () async {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                try {
+                                  try {
+                                    // final AuthResponse response = await Supabase
+                                    //     .instance.client.auth
+                                    //     .signInWithPassword(
+                                    //   email: emailController.text,
+                                    //   password: passwordController.text,
+                                    // );
+                                    // saveToken(valueToken: response.user!.id);
+                                    var res = await LoginService().postLogin(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                    );
+                                    if (res.containsKey('accessToken')) {
+                                      String accessToken =
+                                          res['accessToken'] ?? '';
+
+                                      saveToken(valueToken: accessToken);
+                                      Navigator.pushNamedAndRemoveUntil(context,
+                                          '/bottom_bar', (route) => false);
+                                    }
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                            '/bottom_bar', (route) => false);
+                                  } catch (e) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                            content: Text(
+                                      '$e',
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    )));
+                                    print("error $e");
+                                  }
+                                } catch (e) {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  print("error $e");
+                                }
+                              },
+                              child: isLoading
+                                  ? const CircularProgressIndicator()
+                                  : const Text('Login'),
                             ),
                           ),
                         ),

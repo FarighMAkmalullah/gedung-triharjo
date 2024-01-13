@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:penyewaan_gedung_triharjo/screen/dashboard/list_event_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/detail_pemesanan/widget/form_pilihan_1_widget.dart';
 import 'package:penyewaan_gedung_triharjo/screen/detail_pemesanan/widget/form_pilihan_2_widget.dart';
+import 'package:provider/provider.dart';
 
 class DetailPemesananScreen extends StatefulWidget {
   final String imageAssets;
@@ -19,14 +21,10 @@ class DetailPemesananScreen extends StatefulWidget {
 
 class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
   bool isVisible = false;
-  @override
-  void initState() {
-    super.initState();
-    print(widget.listSyarat);
-  }
 
   @override
   Widget build(BuildContext context) {
+    final eventViewModel = Provider.of<EventViewModel>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -183,7 +181,7 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
                                 Icon(
                                   Icons.arrow_drop_down,
                                   size: 40,
-                                )
+                                ),
                               ],
                             ),
                             ListView.builder(
@@ -219,17 +217,45 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Rp 250.000 / Hari',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Consumer<EventViewModel>(
+                          builder: (context, eventViewModel, child) {
+                            if (widget.title == 'Aula Balai Kelurahan') {
+                              return eventViewModel.hargaAula != 0
+                                  ? Text(
+                                      'Rp ${eventViewModel.hargaAula} / Hari',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                  : const Text('Pilih Tipe Dahulu');
+                            } else if (widget.title == 'Lapangan Olahraga') {
+                              return eventViewModel.hargaLapangan != 0
+                                  ? Text(
+                                      'Rp ${eventViewModel.hargaLapangan} / Hari',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                  : const Text('Pilih Tipe Dahulu');
+                            } else {
+                              return eventViewModel.hargaGedungOlahraga != 0
+                                  ? Text(
+                                      'Rp ${eventViewModel.hargaGedungOlahraga} / Hari',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                  : const Text('Pilih Tipe Dahulu');
+                            }
+                          },
                         ),
-                        Text(
+                        const Text(
                           'Warga Triharjo',
                           style: TextStyle(
                             fontSize: 13,
@@ -243,7 +269,9 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
                     ),
                     widget.title == 'Gedung Olahraga'
                         ? const FormPilihan2Widget()
-                        : const FormPilihan1Widget(),
+                        : FormPilihan1Widget(
+                            title: widget.title,
+                          ),
                     const SizedBox(
                       height: 25,
                     ),

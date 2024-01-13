@@ -48,7 +48,10 @@ class _BottomBarState extends State<BottomBar> {
     return Scaffold(
       appBar: null,
       backgroundColor: Colors.white,
-      body: children[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: children,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 10,
         backgroundColor: Colors.white,

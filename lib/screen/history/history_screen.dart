@@ -27,7 +27,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('History Order'),
+          title: const Text(
+            'History Order',
+            style: TextStyle(color: Colors.white),
+          ),
           centerTitle: true,
           elevation: 0,
           backgroundColor: const Color(0xFF3E70F2),

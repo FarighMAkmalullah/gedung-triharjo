@@ -59,8 +59,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 height: 50,
               ),
               ButtonCardWidget(
-                color: const Color(0xFF4472EB),
-                colorName: Colors.white,
+                color: Colors.white,
+                colorName: const Color(0xFF162D68),
                 iconAsset: 'assets/icon/onboarding/login.png',
                 namaButton: 'Login',
               ),

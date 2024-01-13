@@ -1,4 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+// import 'package:penyewaan_gedung_triharjo/main.dart';
+// import 'package:penyewaan_gedung_triharjo/model/register_model.dart';
+import 'package:penyewaan_gedung_triharjo/screen/login/login_screen.dart';
+import 'package:penyewaan_gedung_triharjo/service/register.dart';
+// import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:email_validator/email_validator.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -8,8 +16,42 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmController =
+      TextEditingController();
+  final TextEditingController _namaLengkapController = TextEditingController();
+  final TextEditingController _noKTPController = TextEditingController();
+  final TextEditingController _dukuhController = TextEditingController();
+  final TextEditingController _kelurahanController = TextEditingController();
+  final TextEditingController _kecamatanController = TextEditingController();
+  final TextEditingController _rtController = TextEditingController();
+  final TextEditingController _rwController = TextEditingController();
+  final TextEditingController _noWhatsappController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _passwordConfirmController.dispose();
+    _namaLengkapController.dispose();
+    _noKTPController.dispose();
+    _dukuhController.dispose();
+    _kelurahanController.dispose();
+    _kecamatanController.dispose();
+    _rtController.dispose();
+    _rwController.dispose();
+    _noWhatsappController.dispose();
+    super.dispose();
+  }
+
+  bool isTextVisible = false;
+
+  bool isTextVisibleConfirmation = false;
+
+  bool isLoading = false;
+
+  String gender = "l";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +104,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 25,
                           ),
                           TextFormField(
-                            controller: emailController,
+                            controller: _namaLengkapController,
+                            validator: (value) {
+                              if (value != null && value.length < 5) {
+                                return 'Enter min. 5 characters';
+                              } else {
+                                return null;
+                              }
+                            },
                             decoration: InputDecoration(
                               labelText: 'Nama Lengkap',
                               filled: true,
@@ -79,7 +128,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 15,
                           ),
                           TextFormField(
-                            controller: emailController,
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value != null && value.length < 5) {
+                                return 'Enter min. 5 characters';
+                              } else {
+                                return null;
+                              }
+                            },
+                            controller: _noKTPController,
                             decoration: InputDecoration(
                               labelText: 'No KTP',
                               filled: true,
@@ -96,7 +153,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 15,
                           ),
                           TextFormField(
-                            controller: emailController,
+                            controller: _dukuhController,
+                            validator: (value) {
+                              if (value != null && value.length < 2) {
+                                return 'Enter min. 1 characters';
+                              } else {
+                                return null;
+                              }
+                            },
                             decoration: InputDecoration(
                               labelText: 'Dukuh',
                               filled: true,
@@ -113,9 +177,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 15,
                           ),
                           TextFormField(
-                            controller: emailController,
+                            controller: _kelurahanController,
+                            validator: (value) {
+                              if (value != null && value.length < 2) {
+                                return 'Enter min. 1 characters';
+                              } else {
+                                return null;
+                              }
+                            },
                             decoration: InputDecoration(
                               labelText: 'Kelurahan',
+                              filled: true,
+                              fillColor: Colors.white,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
+                            controller: _kecamatanController,
+                            validator: (value) {
+                              if (value != null && value.length < 3) {
+                                return 'Enter min. 3 characters';
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Kecamatan',
                               filled: true,
                               fillColor: Colors.white,
                               floatingLabelBehavior:
@@ -133,7 +228,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             children: [
                               Expanded(
                                 child: TextFormField(
-                                  controller: emailController,
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value != null && value.length < 3) {
+                                      return 'Enter min. 2 characters example 01';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: _rtController,
                                   decoration: InputDecoration(
                                     labelText: 'RT',
                                     filled: true,
@@ -152,7 +255,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               Expanded(
                                 child: TextFormField(
-                                  controller: emailController,
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                    if (value != null && value.length < 3) {
+                                      return 'Enter min. 2 characters example 02';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  controller: _rwController,
                                   decoration: InputDecoration(
                                     labelText: 'RW',
                                     filled: true,
@@ -172,7 +283,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 15,
                           ),
                           TextFormField(
-                            controller: emailController,
+                            controller: _emailController,
+                            validator: (email) {
+                              if (email != null &&
+                                  !EmailValidator.validate(email)) {
+                                return 'Enter a valid email';
+                              } else {
+                                return null;
+                              }
+                            },
                             decoration: InputDecoration(
                               labelText: 'Email',
                               filled: true,
@@ -189,25 +308,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 15,
                           ),
                           TextFormField(
-                            controller: emailController,
+                            controller: _passwordController,
+                            validator: (value) {
+                              if (value != null && value.length < 5) {
+                                return 'Enter min. 5 characters';
+                              } else {
+                                return null;
+                              }
+                            },
+                            obscureText: isTextVisible,
                             decoration: InputDecoration(
-                              labelText: 'Email',
-                              filled: true,
-                              fillColor: Colors.white,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          TextFormField(
-                            controller: passwordController,
-                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isTextVisible = !isTextVisible;
+                                    });
+                                  },
+                                  icon: isTextVisible
+                                      ? const Icon(Icons.visibility)
+                                      : const Icon(Icons.visibility_off)),
                               labelText: 'Password',
                               filled: true,
                               fillColor: Colors.white,
@@ -223,9 +342,131 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             height: 15,
                           ),
                           TextFormField(
-                            controller: passwordController,
+                            controller: _passwordConfirmController,
+                            validator: (value) {
+                              if (value != null && value.length < 5) {
+                                return 'Enter min. 5 characters';
+                              } else if (value != _passwordController.text) {
+                                return 'Password didn\'t match';
+                              } else {
+                                return null;
+                              }
+                            },
+                            obscureText: isTextVisibleConfirmation,
                             decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isTextVisibleConfirmation =
+                                          !isTextVisibleConfirmation;
+                                    });
+                                  },
+                                  icon: isTextVisibleConfirmation
+                                      ? const Icon(Icons.visibility)
+                                      : const Icon(Icons.visibility_off)),
                               labelText: 'Confirm Password',
+                              filled: true,
+                              fillColor: Colors.white,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.white,
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      // registerViewModel.setGender('L');
+                                      setState(() {
+                                        gender = "l";
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: gender == 'l'
+                                            ? const Color(0xFF162D68)
+                                            : Colors.transparent,
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Laki - laki',
+                                          style: TextStyle(
+                                            color: gender == 'l'
+                                                ? Colors.white
+                                                : const Color(0xFF777070),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      // registerViewModel.setGender('P');
+                                      setState(() {
+                                        gender = "p";
+                                      });
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: gender == 'p'
+                                            ? const Color(0xFF162D68)
+                                            : Colors.transparent,
+                                        borderRadius: const BorderRadius.only(
+                                          topRight: Radius.circular(10),
+                                          bottomRight: Radius.circular(10),
+                                        ),
+                                      ),
+                                      height: 50,
+                                      child: Center(
+                                        child: Text(
+                                          'Perempuan',
+                                          style: TextStyle(
+                                            color: gender == 'p'
+                                                ? Colors.white
+                                                : const Color(0xFF777070),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          TextFormField(
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value != null && value.length < 5) {
+                                return 'Enter min. 5 characters';
+                              } else {
+                                return null;
+                              }
+                            },
+                            controller: _noWhatsappController,
+                            decoration: InputDecoration(
+                              labelText: 'Nomor Whatsapp',
                               filled: true,
                               fillColor: Colors.white,
                               floatingLabelBehavior:
@@ -254,8 +495,190 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                                   ),
                                 ),
-                                onPressed: () {},
-                                child: const Text('Register'),
+                                onPressed: () async {
+                                  FocusScope.of(context).unfocus();
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  try {
+                                    final email = _emailController.text;
+                                    final password = _passwordController.text;
+                                    // final AuthResponse res = await Supabase
+                                    //     .instance.client.auth
+                                    //     .signUp(
+                                    //   email: email,
+                                    //   password: password,
+                                    // );
+
+                                    await RegisterService().postRegister(
+                                      name: _namaLengkapController.text,
+                                      noKTP: _noKTPController.text,
+                                      dukuh: _dukuhController.text,
+                                      kelurahan: _kelurahanController.text,
+                                      kecamatan: _kecamatanController.text,
+                                      rt: _rtController.text,
+                                      rw: _rwController.text,
+                                      email: _emailController.text,
+                                      gender: gender,
+                                      password: password,
+                                      noTelp: _noWhatsappController.text,
+                                    );
+
+                                    print("SignUp Berhasil");
+                                    showModalBottomSheet(
+                                      context: context,
+                                      backgroundColor: Colors.transparent,
+                                      isScrollControlled: true,
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                          padding: const EdgeInsets.all(20),
+                                          height: 300,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20),
+                                              topRight: Radius.circular(20),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(
+                                                Icons.check,
+                                                size: 80,
+                                                color: Colors.blue,
+                                              ),
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              const Text(
+                                                  "Daftar Akun Anda Berhasil"),
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              FractionallySizedBox(
+                                                widthFactor: 1.0,
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        const Color(0xFF162D68),
+                                                    elevation: 0,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100),
+                                                      side: const BorderSide(
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const LoginScreen(),
+                                                        ));
+                                                  },
+                                                  child: const Text(
+                                                      'Kembali ke Login'),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                    // final Session? session = res.session;
+                                    // final User? user = res.user;
+                                    // print("session ${session}");
+                                    // print("user ${user}");
+
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  } catch (e) {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      backgroundColor: Colors.transparent,
+                                      isScrollControlled: true,
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                          padding: const EdgeInsets.all(20),
+                                          height: 300,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20),
+                                              topRight: Radius.circular(20),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(
+                                                Icons.close,
+                                                size: 80,
+                                                color: Colors.red,
+                                              ),
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              const Text("Daftar Akun Gagal"),
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              FractionallySizedBox(
+                                                widthFactor: 1.0,
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        const Color(0xFF162D68),
+                                                    elevation: 0,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100),
+                                                      side: const BorderSide(
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              const LoginScreen(),
+                                                        ));
+                                                  },
+                                                  child: const Text(
+                                                      'Register Ulang'),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  }
+                                },
+                                child: isLoading
+                                    ? const CircularProgressIndicator()
+                                    : const Text('Register'),
                               ),
                             ),
                           ),
@@ -294,7 +717,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               const SizedBox(
-                height: 40,
+                height: 140,
               ),
             ],
           ),

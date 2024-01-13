@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,8 +14,18 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacementNamed('/onboarding');
+    Timer(const Duration(seconds: 3), () async {
+      var token = await getToken();
+      if (token.toString() == "null") {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/onboarding', (route) => false);
+      } else {
+        // ignore: use_build_context_synchronously
+
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/bottom_bar', (route) => false);
+      }
     });
   }
 
