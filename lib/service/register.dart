@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:penyewaan_gedung_triharjo/const/init/const/api.dart';
 import 'package:dio/dio.dart';
 
@@ -39,7 +38,6 @@ class RegisterService {
       );
       return response.data;
     } on DioException catch (e) {
-      print(e);
       return e.response?.data;
     }
   }

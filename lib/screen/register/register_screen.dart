@@ -16,6 +16,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmController =
@@ -89,6 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   children: [
                     Form(
+                      key: formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -500,180 +502,176 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   setState(() {
                                     isLoading = true;
                                   });
-                                  try {
-                                    final email = _emailController.text;
-                                    final password = _passwordController.text;
-                                    // final AuthResponse res = await Supabase
-                                    //     .instance.client.auth
-                                    //     .signUp(
-                                    //   email: email,
-                                    //   password: password,
-                                    // );
 
-                                    await RegisterService().postRegister(
-                                      name: _namaLengkapController.text,
-                                      noKTP: _noKTPController.text,
-                                      dukuh: _dukuhController.text,
-                                      kelurahan: _kelurahanController.text,
-                                      kecamatan: _kecamatanController.text,
-                                      rt: _rtController.text,
-                                      rw: _rwController.text,
-                                      email: _emailController.text,
-                                      gender: gender,
-                                      password: password,
-                                      noTelp: _noWhatsappController.text,
-                                    );
-
-                                    print("SignUp Berhasil");
-                                    showModalBottomSheet(
-                                      context: context,
-                                      backgroundColor: Colors.transparent,
-                                      isScrollControlled: true,
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          padding: const EdgeInsets.all(20),
-                                          height: 300,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20),
-                                              topRight: Radius.circular(20),
+                                  if (formKey.currentState!.validate()) {
+                                    try {
+                                      await RegisterService().postRegister(
+                                        name: _namaLengkapController.text,
+                                        noKTP: _noKTPController.text,
+                                        dukuh: _dukuhController.text,
+                                        kelurahan: _kelurahanController.text,
+                                        kecamatan: _kecamatanController.text,
+                                        rt: _rtController.text,
+                                        rw: _rwController.text,
+                                        email: _emailController.text,
+                                        gender: gender,
+                                        password: _passwordController.text,
+                                        noTelp: _noWhatsappController.text,
+                                      );
+                                      showModalBottomSheet(
+                                        context: context,
+                                        backgroundColor: Colors.transparent,
+                                        isScrollControlled: true,
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            padding: const EdgeInsets.all(20),
+                                            height: 300,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20),
+                                                topRight: Radius.circular(20),
+                                              ),
                                             ),
-                                          ),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                Icons.check,
-                                                size: 80,
-                                                color: Colors.blue,
-                                              ),
-                                              const SizedBox(
-                                                height: 15,
-                                              ),
-                                              const Text(
-                                                  "Daftar Akun Anda Berhasil"),
-                                              const SizedBox(
-                                                height: 15,
-                                              ),
-                                              FractionallySizedBox(
-                                                widthFactor: 1.0,
-                                                child: ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        const Color(0xFF162D68),
-                                                    elevation: 0,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                      side: const BorderSide(
-                                                        color: Colors.black,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Icon(
+                                                  Icons.check,
+                                                  size: 80,
+                                                  color: Colors.blue,
+                                                ),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                const Text(
+                                                    "Daftar Akun Anda Berhasil"),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                FractionallySizedBox(
+                                                  widthFactor: 1.0,
+                                                  child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          const Color(
+                                                              0xFF162D68),
+                                                      elevation: 0,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(100),
+                                                        side: const BorderSide(
+                                                          color: Colors.black,
+                                                        ),
                                                       ),
                                                     ),
+                                                    onPressed: () {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const LoginScreen(),
+                                                          ));
+                                                    },
+                                                    child: const Text(
+                                                        'Kembali ke Login'),
                                                   ),
-                                                  onPressed: () {
-                                                    Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              const LoginScreen(),
-                                                        ));
-                                                  },
-                                                  child: const Text(
-                                                      'Kembali ke Login'),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    );
-                                    // final Session? session = res.session;
-                                    // final User? user = res.user;
-                                    // print("session ${session}");
-                                    // print("user ${user}");
-
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                  } catch (e) {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      backgroundColor: Colors.transparent,
-                                      isScrollControlled: true,
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          padding: const EdgeInsets.all(20),
-                                          height: 300,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(20),
-                                              topRight: Radius.circular(20),
+                                                )
+                                              ],
                                             ),
-                                          ),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Icon(
-                                                Icons.close,
-                                                size: 80,
-                                                color: Colors.red,
+                                          );
+                                        },
+                                      );
+                                      // final Session? session = res.session;
+                                      // final User? user = res.user;
+                                      // print("session ${session}");
+                                      // print("user ${user}");
+
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    } catch (e) {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        backgroundColor: Colors.transparent,
+                                        isScrollControlled: true,
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            padding: const EdgeInsets.all(20),
+                                            height: 300,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20),
+                                                topRight: Radius.circular(20),
                                               ),
-                                              const SizedBox(
-                                                height: 15,
-                                              ),
-                                              const Text("Daftar Akun Gagal"),
-                                              const SizedBox(
-                                                height: 15,
-                                              ),
-                                              FractionallySizedBox(
-                                                widthFactor: 1.0,
-                                                child: ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        const Color(0xFF162D68),
-                                                    elevation: 0,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                      side: const BorderSide(
-                                                        color: Colors.black,
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Icon(
+                                                  Icons.close,
+                                                  size: 80,
+                                                  color: Colors.red,
+                                                ),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                const Text("Daftar Akun Gagal"),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                FractionallySizedBox(
+                                                  widthFactor: 1.0,
+                                                  child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor:
+                                                          const Color(
+                                                              0xFF162D68),
+                                                      elevation: 0,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(100),
+                                                        side: const BorderSide(
+                                                          color: Colors.black,
+                                                        ),
                                                       ),
                                                     ),
+                                                    onPressed: () {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const LoginScreen(),
+                                                          ));
+                                                    },
+                                                    child: const Text(
+                                                        'Register Ulang'),
                                                   ),
-                                                  onPressed: () {
-                                                    Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              const LoginScreen(),
-                                                        ));
-                                                  },
-                                                  child: const Text(
-                                                      'Register Ulang'),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    );
-                                    setState(() {
-                                      isLoading = false;
-                                    });
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                    }
                                   }
                                 },
                                 child: isLoading

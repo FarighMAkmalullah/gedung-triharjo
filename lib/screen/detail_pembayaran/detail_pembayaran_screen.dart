@@ -5,12 +5,26 @@ class DetailPembayaranScreen extends StatefulWidget {
   final String expiryTime;
   final String bookingCode;
   final String totalPembayaran;
+  final String event;
+  final String noKTP;
+  final String nama;
+  final String email;
+  final String noTelp;
+  final String dateMulai;
+  final String alamat;
   const DetailPembayaranScreen(
       {super.key,
       required this.vaNumber,
       required this.expiryTime,
       required this.bookingCode,
-      required this.totalPembayaran});
+      required this.totalPembayaran,
+      required this.event,
+      required this.noKTP,
+      required this.nama,
+      required this.email,
+      required this.noTelp,
+      required this.dateMulai,
+      required this.alamat});
 
   @override
   State<DetailPembayaranScreen> createState() => _DetailPembayaranScreenState();
@@ -108,11 +122,11 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         "Jumlah Transfer",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -121,7 +135,7 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                       ),
                       Text(
                         "Rp ${widget.totalPembayaran}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
@@ -196,20 +210,20 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                               ),
                               Visibility(
                                 visible: detailPemesanan,
-                                child: const Column(
+                                child: Column(
                                   children: [
-                                    Divider(
+                                    const Divider(
                                       thickness: 1,
                                       height: 1,
                                       color: Color(0xFFA9A9A9),
                                     ),
                                     Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 15),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 15),
                                       child: Center(
                                         child: Text(
-                                          'line badminton',
-                                          style: TextStyle(
+                                          widget.event,
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
                                         ),
@@ -219,75 +233,77 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           'No KTP',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text('1234567890'),
+                                        Text(
+                                          widget.noKTP,
+                                        ),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           'Nama',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text('farid akbar'),
+                                        Text(widget.nama),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           'Email',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text('akbar12ullah@gmail.com'),
+                                        Text(widget.email),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           'No Whatsapp',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text('1234567890'),
+                                        Text(widget.noTelp),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
-                                    Divider(
+                                    const Divider(
                                       thickness: 1,
                                       height: 1,
                                       color: Color(0xFFA9A9A9),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
-                                    Row(
+                                    const Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
@@ -299,7 +315,7 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(
@@ -307,15 +323,15 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          '28 September 2023',
-                                          style: TextStyle(
+                                          widget.dateMulai,
+                                          style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Icon(Icons.date_range),
+                                        const Icon(Icons.date_range),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                   ],
@@ -337,10 +353,10 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                                 bottomRight: Radius.circular(5),
                               ),
                             ),
-                            child: const Column(
+                            child: Column(
                               children: [
-                                Text('Alamat'),
-                                Text('Alamat'),
+                                const Text('Alamat'),
+                                Text(widget.alamat),
                               ],
                             ),
                           ),

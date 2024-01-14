@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:penyewaan_gedung_triharjo/credential/supabase_credential.dart';
 import 'package:penyewaan_gedung_triharjo/screen/bottom_bar/bottom_bar.dart';
+import 'package:penyewaan_gedung_triharjo/screen/checking_pemesanan/checking_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/dashboard/list_event_view_model.dart';
-import 'package:penyewaan_gedung_triharjo/screen/detail_pembayaran/detail_pembayaran_screen.dart';
-import 'package:penyewaan_gedung_triharjo/screen/detail_pemesanan_berhasil/detail_pemesanan_berhasil_screen.dart';
+import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/login/login_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/onboarding/onboarding_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/profil/provil_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/register/register_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/splash_screen/splash_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-// import 'package:penyewaan_gedung_triharjo/screen/splash_screen/splash_screen.dart';
 
 void main() async {
   runApp(
@@ -23,6 +20,12 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => EventViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PemesananViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => HistoryViewModel(),
         ),
       ],
       child: const GedungTriharjo(),

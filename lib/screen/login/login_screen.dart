@@ -4,7 +4,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
 import 'package:penyewaan_gedung_triharjo/service/login.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +13,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final formKey = GlobalKey<FormState>();
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
@@ -62,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 children: [
                   Form(
+                    key: formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -149,54 +151,59 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               onPressed: () async {
-                                setState(() {
-                                  isLoading = true;
-                                });
-                                try {
+                                FocusScope.of(context).unfocus();
+                                if (formKey.currentState!.validate()) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
                                   try {
-                                    // final AuthResponse response = await Supabase
-                                    //     .instance.client.auth
-                                    //     .signInWithPassword(
-                                    //   email: emailController.text,
-                                    //   password: passwordController.text,
-                                    // );
-                                    // saveToken(valueToken: response.user!.id);
-                                    var res = await LoginService().postLogin(
-                                      email: emailController.text,
-                                      password: passwordController.text,
-                                    );
-                                    if (res.containsKey('accessToken')) {
-                                      String accessToken =
-                                          res['accessToken'] ?? '';
+                                    try {
+                                      var res = await LoginService().postLogin(
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                      );
+                                      if (res.containsKey('accessToken')) {
+                                        String accessToken =
+                                            res['accessToken'] ?? '';
 
-                                      saveToken(valueToken: accessToken);
-                                      Navigator.pushNamedAndRemoveUntil(context,
-                                          '/bottom_bar', (route) => false);
+                                        saveToken(valueToken: accessToken);
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            '/bottom_bar',
+                                            (route) => false);
+                                      } else if (res.containsKey('error')) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                          '${res['error']}',
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        )));
+                                      }
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                              '/bottom_bar', (route) => false);
+                                    } catch (e) {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                        '$e',
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      )));
+                                      // print("error $e");
                                     }
-                                    setState(() {
-                                      isLoading = false;
-                                    });
-                                    Navigator.of(context)
-                                        .pushNamedAndRemoveUntil(
-                                            '/bottom_bar', (route) => false);
                                   } catch (e) {
                                     setState(() {
                                       isLoading = false;
                                     });
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                            content: Text(
-                                      '$e',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    )));
-                                    print("error $e");
                                   }
-                                } catch (e) {
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                  print("error $e");
                                 }
                               },
                               child: isLoading

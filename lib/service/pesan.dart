@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/const/api.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
@@ -12,6 +12,7 @@ class AddPemesananService {
     required String tipeHarga,
     required String paymentType,
   }) async {
+    log('id: $idEvent, dateMulai: $dateMulai, jumlah hari: $jumlahHari, Tipe Harga: $tipeHarga, payment Type : $paymentType');
     String? token = await getToken();
     try {
       Response response = await Dio().post(

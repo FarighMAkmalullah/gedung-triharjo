@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
+import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/profil/provil_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfilScreen extends StatefulWidget {
   const ProfilScreen({super.key});
@@ -13,15 +13,10 @@ class ProfilScreen extends StatefulWidget {
 
 class _ProfilScreenState extends State<ProfilScreen> {
   late Future detailProfilFuture;
-
-  // String token = await getToken();
-
   @override
   void initState() {
-    // TODO: implement initState
     final detailViewModel =
         Provider.of<ProfilViewModel>(context, listen: false);
-
     detailProfilFuture = detailViewModel.getProfilDetail();
     super.initState();
   }
@@ -308,6 +303,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                               ),
                                               onPressed: () {
                                                 removeToken();
+                                                Provider.of<HistoryViewModel>(
+                                                        context,
+                                                        listen: false)
+                                                    .dispose();
                                                 Navigator
                                                     .pushNamedAndRemoveUntil(
                                                         context,

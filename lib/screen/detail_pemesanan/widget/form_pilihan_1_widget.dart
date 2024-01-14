@@ -1,15 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:penyewaan_gedung_triharjo/model/event_model.dart';
+import 'package:penyewaan_gedung_triharjo/screen/checking_pemesanan/checking_pemesanan_widget.dart';
 import 'package:penyewaan_gedung_triharjo/screen/dashboard/list_event_view_model.dart';
-import 'package:penyewaan_gedung_triharjo/screen/detail_pembayaran/detail_pembayaran_screen.dart';
-import 'package:penyewaan_gedung_triharjo/screen/jadwal/jadwal_screen.dart';
 import 'package:penyewaan_gedung_triharjo/service/pesan.dart';
 import 'package:provider/provider.dart';
+import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
 
 class FormPilihan1Widget extends StatefulWidget {
   final String title;
@@ -85,15 +84,12 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
       );
 
       if (res.containsKey('result') && res != null) {
+        Provider.of<HistoryViewModel>(context, listen: false).getHistoryData();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailPembayaranScreen(
-              vaNumber: res["result"]["va_number"],
-              expiryTime: res["result"]["expiry_time"],
-              bookingCode: res["result"]["bookingCode"],
-              totalPembayaran: "${res["result"]["totalPembayaran"]}",
-            ),
+            builder: (context) =>
+                CheckingPemesanan(codeBooking: res["result"]["bookingCode"]),
           ),
         );
 

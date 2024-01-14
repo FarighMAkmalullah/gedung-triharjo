@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:penyewaan_gedung_triharjo/model/list_pemesanan_model.dart';
+import 'package:penyewaan_gedung_triharjo/screen/checking_pemesanan/checking_pemesanan_widget.dart';
+import 'package:penyewaan_gedung_triharjo/screen/error/error_widget.dart';
+import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
+import 'package:provider/provider.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -8,6 +13,15 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  late Future<void> historyDataViewModel;
+  @override
+  void initState() {
+    super.initState();
+    final historyViewModel =
+        Provider.of<HistoryViewModel>(context, listen: false);
+    historyDataViewModel = historyViewModel.getHistoryData();
+  }
+
   Map historyList = {
     'history': [
       {
@@ -35,122 +49,158 @@ class _HistoryScreenState extends State<HistoryScreen> {
           elevation: 0,
           backgroundColor: const Color(0xFF3E70F2),
         ),
-        body: ListView.builder(
-          itemCount: historyList['history'].length,
-          itemBuilder: (context, index) {
-            return Container(
-              margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0, 0),
-                    blurRadius: 4,
-                    spreadRadius: 1,
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        body: StreamBuilder(
+          stream: Provider.of<HistoryViewModel>(context).historyStream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              final historyViewModel =
+                  Provider.of<HistoryViewModel>(context, listen: false);
+              return Center(
+                child: ErrorWidgetScreen(onRefreshPressed: () {
+                  historyViewModel.getHistoryData();
+                }),
+              );
+            } else {
+              List<DetailPemesananModel> historyData = snapshot.data ?? [];
+              if (historyData.isEmpty) {
+                return const Center(
+                  child: Text('Belum ada Pemesanan'),
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: historyData.length,
+                  itemBuilder: (context, index) {
+                    var detailHistory = historyData[index];
+                    return Container(
+                      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0, 0),
+                            blurRadius: 4,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
                         children: [
-                          Image.asset(
-                            'assets/icon/history/purchase.png',
-                            fit: BoxFit.fill,
-                            height: 50,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Column(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                historyList['history'][index]['title'],
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.asset(
+                                    'assets/icon/history/purchase.png',
+                                    fit: BoxFit.fill,
+                                    height: 50,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        detailHistory.event,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text('ID : ${detailHistory.bookingCode}')
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: detailHistory.status == "success"
+                                      ? Colors.green
+                                      : Colors.red,
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Text(
+                                  detailHistory.status == "success"
+                                      ? 'Lunas'
+                                      : 'Belum',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF3E70F2),
+                                    elevation: 0,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CheckingPemesanan(
+                                            codeBooking:
+                                                detailHistory.bookingCode),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('Lihat Detail'),
                                 ),
                               ),
                               const SizedBox(
-                                height: 5,
+                                width: 15,
                               ),
-                              Text(
-                                  'ID : ${historyList['history'][index]['id_pemesanan']}')
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                    side: const BorderSide(
+                                      color: Color(0xFFCE1818),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: const Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                      color: Color(0xFFCE1818),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
-                          ),
+                          )
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: historyList['history'][index]['lunas']
-                              ? Colors.green
-                              : Colors.red,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: Text(
-                          historyList['history'][index]['lunas']
-                              ? 'Lunas'
-                              : 'Belum',
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF3E70F2),
-                            elevation: 0,
-                          ),
-                          onPressed: () {},
-                          child: const Text('Lihat Detail'),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.transparent,
-                            elevation: 0,
-                            side: const BorderSide(
-                              color: Color(0xFFCE1818),
-                              width: 1,
-                            ),
-                          ),
-                          onPressed: () {},
-                          child: const Text(
-                            'Cancel',
-                            style: TextStyle(
-                              color: Color(0xFFCE1818),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            );
+                    );
+                  },
+                );
+              }
+            }
           },
         ),
       ),

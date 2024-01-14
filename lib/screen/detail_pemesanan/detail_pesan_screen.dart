@@ -24,7 +24,7 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final eventViewModel = Provider.of<EventViewModel>(context, listen: false);
+    // final eventViewModel = Provider.of<EventViewModel>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: ListView(

@@ -22,7 +22,6 @@ class _SplashScreenState extends State<SplashScreen> {
             .pushNamedAndRemoveUntil('/onboarding', (route) => false);
       } else {
         // ignore: use_build_context_synchronously
-
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/bottom_bar', (route) => false);
       }
