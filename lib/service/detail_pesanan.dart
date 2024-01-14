@@ -6,7 +6,7 @@ class DetailPemesananService {
   static Future<Response> getDetailPemesanan({
     required String codeBooking,
   }) async {
-    String? token = await getToken();
+    String token = await getToken();
     try {
       final dio = Dio();
       final response = await dio.get("$triharjoAPI/payment/$codeBooking",

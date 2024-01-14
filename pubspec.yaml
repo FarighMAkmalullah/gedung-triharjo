@@ -44,6 +44,9 @@ dependencies:
   email_validator: ^2.1.17
   provider: ^6.1.1
   shared_preferences: ^2.2.2
+  rxdart: ^0.27.7
+  restart_app: ^1.2.1
+  flutter_phoenix: ^1.1.1
 
 dev_dependencies:
   flutter_test:

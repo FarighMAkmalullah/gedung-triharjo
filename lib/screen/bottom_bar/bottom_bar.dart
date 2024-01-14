@@ -16,7 +16,6 @@ class BottomBar extends StatefulWidget {
 
 class _BottomBarState extends State<BottomBar> {
   late int currentIndex;
-
   @override
   void initState() {
     super.initState();

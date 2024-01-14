@@ -2,9 +2,10 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/const/api.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
+import 'package:penyewaan_gedung_triharjo/model/list_pemesanan_model.dart';
 
 class ListPemesananService {
-  static Future<List<Map<String, dynamic>>> fetchListPemesananData() async {
+  static Future<List<DetailPemesananModel>> fetchListPemesananData() async {
     String? token = await getToken();
     try {
       final dio = Dio();
@@ -17,10 +18,7 @@ class ListPemesananService {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data["result"];
-        return data
-            .map<Map<String, dynamic>>(
-                (item) => Map<String, dynamic>.from(item))
-            .toList();
+        return data.map((item) => DetailPemesananModel.fromJson(item)).toList();
       } else {
         throw Exception('Failed to load List Pemesanan Data');
       }

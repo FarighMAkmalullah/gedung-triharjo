@@ -232,7 +232,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: TextFormField(
                                   keyboardType: TextInputType.number,
                                   validator: (value) {
-                                    if (value != null && value.length < 3) {
+                                    if (value != null && value.length < 2) {
                                       return 'Enter min. 2 characters example 01';
                                     } else {
                                       return null;
@@ -259,7 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 child: TextFormField(
                                   keyboardType: TextInputType.number,
                                   validator: (value) {
-                                    if (value != null && value.length < 3) {
+                                    if (value != null && value.length < 2) {
                                       return 'Enter min. 2 characters example 02';
                                     } else {
                                       return null;
@@ -499,11 +499,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                                 onPressed: () async {
                                   FocusScope.of(context).unfocus();
-                                  setState(() {
-                                    isLoading = true;
-                                  });
 
                                   if (formKey.currentState!.validate()) {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
                                     try {
                                       await RegisterService().postRegister(
                                         name: _namaLengkapController.text,

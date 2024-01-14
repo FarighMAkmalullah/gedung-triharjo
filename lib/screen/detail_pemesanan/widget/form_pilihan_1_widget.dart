@@ -8,7 +8,6 @@ import 'package:penyewaan_gedung_triharjo/screen/checking_pemesanan/checking_pem
 import 'package:penyewaan_gedung_triharjo/screen/dashboard/list_event_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/service/pesan.dart';
 import 'package:provider/provider.dart';
-import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
 
 class FormPilihan1Widget extends StatefulWidget {
   final String title;
@@ -84,7 +83,6 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
       );
 
       if (res.containsKey('result') && res != null) {
-        Provider.of<HistoryViewModel>(context, listen: false).getHistoryData();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

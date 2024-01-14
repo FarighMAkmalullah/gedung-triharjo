@@ -165,12 +165,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       if (res.containsKey('accessToken')) {
                                         String accessToken =
                                             res['accessToken'] ?? '';
-
                                         saveToken(valueToken: accessToken);
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            '/bottom_bar',
-                                            (route) => false);
+                                        Navigator.pushNamed(
+                                          context,
+                                          '/bottom_bar',
+                                        );
                                       } else if (res.containsKey('error')) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(

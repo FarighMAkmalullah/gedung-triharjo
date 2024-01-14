@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
 import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/profil/provil_view_model.dart';
@@ -302,16 +303,29 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                                 ),
                                               ),
                                               onPressed: () {
-                                                removeToken();
                                                 Provider.of<HistoryViewModel>(
                                                         context,
                                                         listen: false)
-                                                    .dispose();
-                                                Navigator
-                                                    .pushNamedAndRemoveUntil(
-                                                        context,
-                                                        '/',
-                                                        (route) => false);
+                                                    .cancelTimer();
+
+                                                Future.delayed(
+                                                    const Duration(seconds: 1),
+                                                    () {
+                                                  Provider.of<HistoryViewModel>(
+                                                          context,
+                                                          listen: false)
+                                                      .dispose();
+                                                  removeToken();
+                                                });
+                                                Future.delayed(
+                                                    const Duration(seconds: 2),
+                                                    () {
+                                                  WidgetsBinding.instance
+                                                      .addPostFrameCallback(
+                                                          (_) {
+                                                    Phoenix.rebirth(context);
+                                                  });
+                                                });
                                               },
                                               child: Row(
                                                 mainAxisAlignment:

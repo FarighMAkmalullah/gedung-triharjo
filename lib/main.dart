@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:penyewaan_gedung_triharjo/screen/bottom_bar/bottom_bar.dart';
 import 'package:penyewaan_gedung_triharjo/screen/checking_pemesanan/checking_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/dashboard/list_event_view_model.dart';
@@ -13,24 +14,27 @@ import 'package:provider/provider.dart';
 
 void main() async {
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => ProfilViewModel(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => EventViewModel(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => PemesananViewModel(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => HistoryViewModel(),
-        ),
-      ],
-      child: const GedungTriharjo(),
+    Phoenix(
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => ProfilViewModel(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => EventViewModel(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => PemesananViewModel(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => HistoryViewModel(),
+          ),
+        ],
+        child: const GedungTriharjo(),
+      ),
     ),
   );
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {});
 }
