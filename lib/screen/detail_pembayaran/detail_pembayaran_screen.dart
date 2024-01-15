@@ -1,4 +1,10 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailPembayaranScreen extends StatefulWidget {
   final String vaNumber;
@@ -31,6 +37,62 @@ class DetailPembayaranScreen extends StatefulWidget {
 }
 
 class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
+  late DateTime expiredDateTime;
+  late Duration countdownDuration;
+  late String countdownText;
+  late Timer _timer;
+  @override
+  void initState() {
+    super.initState();
+    expiredDateTime = DateTime.parse(widget.expiryTime);
+    countdownDuration = expiredDateTime.difference(DateTime.now());
+    countdownText = formatCountdown(countdownDuration);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      // Start timer setelah widget selesai di-build
+      startTimer();
+    });
+    log(widget.dateMulai);
+  }
+
+  String tanggalBooking(value) {
+    DateTime dateTime = DateTime.parse(value);
+    dateTime = dateTime.toLocal();
+    return "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      countdownDuration = countdownDuration - Duration(seconds: 1);
+      setState(() {
+        countdownText = formatCountdown(countdownDuration);
+      });
+      if (countdownDuration.isNegative) {
+        timer.cancel();
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  String formatCountdown(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+
+    return '${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds';
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  //Bikin int jadi Currency
+  String formatAmount(int amount) {
+    final NumberFormat formatter = NumberFormat.decimalPattern('id');
+    return formatter.format(amount);
+  }
+
   bool detailPemesanan = true;
   @override
   Widget build(BuildContext context) {
@@ -56,7 +118,7 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                   width: 5,
                 ),
                 Text(
-                  "Menunggu Pembayaran ${widget.expiryTime}",
+                  "Menunggu Pembayaran ${countdownText}",
                   style: const TextStyle(color: Colors.white),
                 ),
               ],
@@ -113,7 +175,16 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                                 width: 1,
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Clipboard.setData(
+                                  ClipboardData(text: widget.vaNumber));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Virtual Account Number telah disalin'),
+                                ),
+                              );
+                            },
                             child: const Text("Salin"),
                           ),
                         ],
@@ -134,7 +205,7 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                         ),
                       ),
                       Text(
-                        "Rp ${widget.totalPembayaran}",
+                        "Rp ${formatAmount(int.parse(widget.totalPembayaran))},-",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -148,7 +219,22 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2BA34C)),
-                    onPressed: () {},
+                    onPressed: () {
+                      String message = '''
+                        Saya ingin konfirmasi pesanan saya dengan data berikut:
+                        Nama = ${widget.nama},
+                        Email = ${widget.email},
+                        Code Booking = ${widget.bookingCode},
+                        No Whatsapp = ${widget.noTelp},
+                        Tanggal Booking = ${widget.dateMulai},
+                        Tipe Pembayaran = bri,
+                        Terima kasih...
+                        ''';
+
+                      String whatsappLink =
+                          'https://wa.me/085875846691?text=${Uri.encodeFull(message)}';
+                      launchUrl(Uri.parse(whatsappLink));
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -323,7 +409,7 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          widget.dateMulai,
+                                          tanggalBooking(widget.dateMulai),
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),

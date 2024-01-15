@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:penyewaan_gedung_triharjo/screen/dashboard/list_event_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/detail_pemesanan/widget/form_pilihan_1_widget.dart';
 import 'package:penyewaan_gedung_triharjo/screen/detail_pemesanan/widget/form_pilihan_2_widget.dart';
@@ -21,6 +22,12 @@ class DetailPemesananScreen extends StatefulWidget {
 
 class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
   bool isVisible = false;
+
+  //Bikin int jadi Currency
+  String formatAmount(int amount) {
+    final NumberFormat formatter = NumberFormat.decimalPattern('id');
+    return formatter.format(amount);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +232,7 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
                             if (widget.title == 'Aula Balai Kelurahan') {
                               return eventViewModel.hargaAula != 0
                                   ? Text(
-                                      'Rp ${eventViewModel.hargaAula} / Hari',
+                                      'Rp ${formatAmount(eventViewModel.hargaAula)} / Hari',
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w600,
@@ -235,7 +242,7 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
                             } else if (widget.title == 'Lapangan Olahraga') {
                               return eventViewModel.hargaLapangan != 0
                                   ? Text(
-                                      'Rp ${eventViewModel.hargaLapangan} / Hari',
+                                      'Rp ${formatAmount(eventViewModel.hargaAula)} / Hari',
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w600,

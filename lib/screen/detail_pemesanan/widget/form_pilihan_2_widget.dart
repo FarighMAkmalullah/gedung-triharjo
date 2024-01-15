@@ -30,15 +30,21 @@ class _FormPilihan2WidgetState extends State<FormPilihan2Widget> {
   String? selectedLangganan;
   String? selectedKeperluan;
   String? selectedTipe;
+  String? selectedTipeBerlangganan;
   List<String> optionsLangganan = [
     'Berlangganan',
-    'Tidak Berlangganan',
+    'Gedung',
   ];
   List<String> optionsKeperluan = [
     'Hajatan / pernikahan',
     'Pameran/Expo',
     'Turnamen/Pertandingan',
     'Rapat/Pertemuan',
+  ];
+  List<String> optionsBerlangganan = [
+    'Line Badminton Bulanan',
+    'Line Badminton Sesi',
+    'Unit 1 Gedung',
   ];
   List<String> optionsTipe = [
     'Organisasi',
@@ -52,7 +58,6 @@ class _FormPilihan2WidgetState extends State<FormPilihan2Widget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         DropdownButtonFormField(
-          // controller: passwordController,
           value: selectedLangganan,
           validator: (String? value) {
             if (value!.isEmpty) {
@@ -84,32 +89,71 @@ class _FormPilihan2WidgetState extends State<FormPilihan2Widget> {
             ),
           ),
         ),
-        const SizedBox(
-          height: 20,
+        Visibility(
+          visible: selectedLangganan == 'Gedung',
+          child: const SizedBox(
+            height: 20,
+          ),
         ),
-        DropdownButtonFormField(
-          // controller: passwordController,
-          value: selectedKeperluan,
-          items: optionsKeperluan.map((String option) {
-            return DropdownMenuItem(
-              value: option,
-              child: Text(option),
-            );
-          }).toList(),
-          onChanged: (newValue) {
-            setState(() {
-              selectedKeperluan = newValue!;
-            });
-          },
-          decoration: InputDecoration(
-            suffixIcon: const Icon(Icons.dataset),
-            labelText: 'Pilih Keperluan',
-            filled: true,
-            fillColor: Colors.white,
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: BorderSide.none,
+        Visibility(
+          visible: selectedLangganan == 'Gedung',
+          child: DropdownButtonFormField(
+            value: selectedKeperluan,
+            items: optionsKeperluan.map((String option) {
+              return DropdownMenuItem(
+                value: option,
+                child: Text(option),
+              );
+            }).toList(),
+            onChanged: (newValue) {
+              setState(() {
+                selectedKeperluan = newValue!;
+              });
+            },
+            decoration: InputDecoration(
+              suffixIcon: const Icon(Icons.dataset),
+              labelText: 'Pilih Keperluan',
+              filled: true,
+              fillColor: Colors.white,
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+        ),
+        Visibility(
+          visible: selectedLangganan == 'Berlangganan',
+          child: const SizedBox(
+            height: 20,
+          ),
+        ),
+        Visibility(
+          visible: selectedLangganan == 'Berlangganan',
+          child: DropdownButtonFormField(
+            value: selectedTipeBerlangganan,
+            items: optionsBerlangganan.map((String option) {
+              return DropdownMenuItem(
+                value: option,
+                child: Text(option),
+              );
+            }).toList(),
+            onChanged: (newValue) {
+              setState(() {
+                selectedTipeBerlangganan = newValue!;
+              });
+            },
+            decoration: InputDecoration(
+              suffixIcon: const Icon(Icons.dataset),
+              labelText: 'Pilih Tipe Berlangganan',
+              filled: true,
+              fillColor: Colors.white,
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide.none,
+              ),
             ),
           ),
         ),
@@ -117,7 +161,6 @@ class _FormPilihan2WidgetState extends State<FormPilihan2Widget> {
           height: 20,
         ),
         DropdownButtonFormField(
-          // controller: passwordController,
           value: selectedTipe,
           items: optionsTipe.map((String option) {
             return DropdownMenuItem(
@@ -198,55 +241,67 @@ class _FormPilihan2WidgetState extends State<FormPilihan2Widget> {
         const SizedBox(
           height: 20,
         ),
-        const Text(
-          'Pilih Sesi',
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+        Visibility(
+          visible: selectedLangganan == 'Berlangganan' &&
+              selectedTipeBerlangganan == 'Line Badminton Sesi',
+          child: const Text(
+            'Pilih Sesi',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+          ),
         ),
-        const SizedBox(
-          height: 20,
+        Visibility(
+          visible: selectedLangganan == 'Berlangganan' &&
+              selectedTipeBerlangganan == 'Line Badminton Sesi',
+          child: const SizedBox(
+            height: 20,
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 5.0,
-                crossAxisSpacing: 8.0,
-                childAspectRatio: 3.0,
+        Visibility(
+          visible: selectedLangganan == 'Berlangganan' &&
+              selectedTipeBerlangganan == 'Line Badminton Sesi',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 5.0,
+                  crossAxisSpacing: 8.0,
+                  childAspectRatio: 3.0,
+                ),
+                itemCount: chipValues.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ChoiceChip(
+                    label: Text(chipValues[index]),
+                    selectedColor: Colors.blue,
+                    labelStyle: TextStyle(
+                      color: selectedChips.contains(chipValues[index])
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                    selected: selectedChips.contains(chipValues[index]),
+                    onSelected: (bool selected) {
+                      setState(() {
+                        if (selected) {
+                          selectedChips.add(chipValues[index]);
+                        } else {
+                          selectedChips.remove(chipValues[index]);
+                        }
+                      });
+                    },
+                  );
+                },
               ),
-              itemCount: chipValues.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ChoiceChip(
-                  label: Text(chipValues[index]),
-                  selectedColor: Colors.blue,
-                  labelStyle: TextStyle(
-                    color: selectedChips.contains(chipValues[index])
-                        ? Colors.white
-                        : Colors.black,
-                  ),
-                  selected: selectedChips.contains(chipValues[index]),
-                  onSelected: (bool selected) {
-                    setState(() {
-                      if (selected) {
-                        selectedChips.add(chipValues[index]);
-                      } else {
-                        selectedChips.remove(chipValues[index]);
-                      }
-                    });
-                  },
-                );
-              },
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            selectedChips.isEmpty
-                ? Container()
-                : Text('Anda Memilih Sesi: ${selectedChips.join(', ')}'),
-          ],
+              const SizedBox(
+                height: 15,
+              ),
+              selectedChips.isEmpty
+                  ? Container()
+                  : Text('Anda Memilih Sesi: ${selectedChips.join(', ')}'),
+            ],
+          ),
         ),
         const SizedBox(
           height: 20,

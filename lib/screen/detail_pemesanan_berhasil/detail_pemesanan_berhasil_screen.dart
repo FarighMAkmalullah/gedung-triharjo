@@ -1,15 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DetailPemesananBerhasil extends StatefulWidget {
-  const DetailPemesananBerhasil({super.key});
+  final String totalPembayaran;
+  final String event;
+  final String noKTP;
+  final String nama;
+  final String email;
+  final String noTelp;
+  final String dateMulai;
+  final String alamat;
+  final String bookingCode;
+  const DetailPemesananBerhasil({
+    super.key,
+    required this.totalPembayaran,
+    required this.event,
+    required this.noKTP,
+    required this.nama,
+    required this.email,
+    required this.noTelp,
+    required this.dateMulai,
+    required this.alamat,
+    required this.bookingCode,
+  });
 
   @override
   State<DetailPemesananBerhasil> createState() =>
       _DetailPemesananBerhasilState();
 }
 
+String tanggalBooking(value) {
+  DateTime dateTime = DateTime.parse(value);
+  dateTime = dateTime.toLocal();
+  return "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+}
+
 class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
   bool detailPemesanan = true;
+
+  //Bikin int jadi Currency
+  String formatAmount(int amount) {
+    final NumberFormat formatter = NumberFormat.decimalPattern('id');
+    return formatter.format(amount);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,17 +63,29 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
           const SizedBox(
             height: 16,
           ),
-          const Center(
+          Center(
             child: Text(
-              'ID Pemesanan : 202419172',
-              style: TextStyle(
+              "Rp ${formatAmount(int.parse(widget.totalPembayaran))},-",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Center(
+            child: Text(
+              'ID Pemesanan : ${widget.bookingCode}',
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 15,
               ),
             ),
           ),
           const SizedBox(
-            height: 16,
+            height: 10,
           ),
           const Center(
             child: Text(
@@ -96,19 +142,20 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
                           ),
                           Visibility(
                             visible: detailPemesanan,
-                            child: const Column(
+                            child: Column(
                               children: [
-                                Divider(
+                                const Divider(
                                   thickness: 1,
                                   height: 1,
                                   color: Color(0xFFA9A9A9),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 15),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 15),
                                   child: Center(
                                     child: Text(
-                                      'line badminton',
-                                      style: TextStyle(
+                                      widget.event,
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
                                     ),
@@ -118,75 +165,75 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'No KTP',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text('1234567890'),
+                                    Text(widget.noKTP),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Nama',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text('farid akbar'),
+                                    Text(widget.nama),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Email',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text('akbar12ullah@gmail.com'),
+                                    Text(widget.email),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'No Whatsapp',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text('1234567890'),
+                                    Text(widget.noTelp),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
-                                Divider(
+                                const Divider(
                                   thickness: 1,
                                   height: 1,
                                   color: Color(0xFFA9A9A9),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
-                                Row(
+                                const Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -198,7 +245,7 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
@@ -206,15 +253,15 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '28 September 2023',
-                                      style: TextStyle(
+                                      tanggalBooking(widget.dateMulai),
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Icon(Icons.date_range),
+                                    const Icon(Icons.date_range),
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                               ],
@@ -236,10 +283,10 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
                             bottomRight: Radius.circular(5),
                           ),
                         ),
-                        child: const Column(
+                        child: Column(
                           children: [
-                            Text('Alamat'),
-                            Text('Alamat'),
+                            const Text('Alamat'),
+                            Text(widget.alamat),
                           ],
                         ),
                       ),

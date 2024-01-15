@@ -46,7 +46,9 @@ class BookingModel {
       jumlahHari: json['jumlahHari'],
       status: json['status'],
       totalPembayaran: json['totalPembayaran'],
-      pembayaran: PembayaranModel.fromJson(json['pembayaran']),
+      pembayaran: json['pembayaran'] != null
+          ? PembayaranModel.fromJson(json['pembayaran'])
+          : null,
       createdAt: DateTime.parse(json['createdAt']),
       alamat: json['alamat'],
       rtrw: json['rtrw'],

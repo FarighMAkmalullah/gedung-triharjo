@@ -4,6 +4,7 @@ import 'package:penyewaan_gedung_triharjo/screen/detail_pembayaran/detail_pembay
 import 'package:penyewaan_gedung_triharjo/screen/detail_pemesanan_berhasil/detail_pemesanan_berhasil_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/error/error_widget.dart';
 import 'package:provider/provider.dart';
+import 'dart:developer';
 
 class CheckingPemesanan extends StatefulWidget {
   final String codeBooking;
@@ -36,6 +37,7 @@ class _CheckingPemesananState extends State<CheckingPemesanan> {
             ),
           );
         } else if (snapshot.hasError) {
+          log("${snapshot.error}");
           final detailViewModel =
               Provider.of<PemesananViewModel>(context, listen: false);
           return Scaffold(
@@ -66,17 +68,32 @@ class _CheckingPemesananState extends State<CheckingPemesanan> {
                   dateMulai: "${provider.detailPemesanan!.dateMulai}",
                   alamat: provider.detailPemesanan!.alamat,
                 );
-              } else if (provider.detailPemesanan?.status == "success") {
-                return const DetailPemesananBerhasil();
+              } else if (provider.detailPemesanan!.status == "success") {
+                log(provider.detailPemesanan!.status);
+                return DetailPemesananBerhasil(
+                  bookingCode: provider.detailPemesanan!.bookingCode,
+                  totalPembayaran:
+                      "${provider.detailPemesanan!.totalPembayaran}",
+                  event: provider.detailPemesanan!.event,
+                  noKTP: provider.detailPemesanan!.noKTP,
+                  nama: provider.detailPemesanan!.nama,
+                  email: provider.detailPemesanan!.email,
+                  noTelp: provider.detailPemesanan!.noTelp,
+                  dateMulai: "${provider.detailPemesanan!.dateMulai}",
+                  alamat: provider.detailPemesanan!.alamat,
+                );
               } else {
+                log(provider.detailPemesanan!.status);
                 final detailViewModel =
                     Provider.of<PemesananViewModel>(context, listen: false);
                 return Scaffold(
                   body: Center(
-                    child: ErrorWidgetScreen(onRefreshPressed: () {
-                      detailViewModel.getPemesananDetail(
-                          codeBooking: widget.codeBooking);
-                    }),
+                    child: ErrorWidgetScreen(
+                      onRefreshPressed: () {
+                        detailViewModel.getPemesananDetail(
+                            codeBooking: widget.codeBooking);
+                      },
+                    ),
                   ),
                 );
               }
@@ -85,6 +102,7 @@ class _CheckingPemesananState extends State<CheckingPemesanan> {
         } else {
           final detailViewModel =
               Provider.of<PemesananViewModel>(context, listen: false);
+          log(detailViewModel.detailPemesanan!.status);
           return Scaffold(
             body: Center(
               child: ErrorWidgetScreen(onRefreshPressed: () {

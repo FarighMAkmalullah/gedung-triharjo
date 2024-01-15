@@ -155,24 +155,30 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     child: const Text('Lihat Detail'),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 15,
+                                Visibility(
+                                  visible: detailHistory.status != "success",
+                                  child: const SizedBox(
+                                    width: 15,
+                                  ),
                                 ),
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.transparent,
-                                      elevation: 0,
-                                      side: const BorderSide(
-                                        color: Color(0xFFCE1818),
-                                        width: 1,
+                                Visibility(
+                                  visible: detailHistory.status != "success",
+                                  child: Expanded(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        elevation: 0,
+                                        side: const BorderSide(
+                                          color: Color(0xFFCE1818),
+                                          width: 1,
+                                        ),
                                       ),
-                                    ),
-                                    onPressed: () {},
-                                    child: const Text(
-                                      'Cancel',
-                                      style: TextStyle(
-                                        color: Color(0xFFCE1818),
+                                      onPressed: () {},
+                                      child: const Text(
+                                        'Cancel',
+                                        style: TextStyle(
+                                          color: Color(0xFFCE1818),
+                                        ),
                                       ),
                                     ),
                                   ),

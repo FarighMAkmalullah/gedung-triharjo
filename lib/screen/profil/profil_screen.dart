@@ -314,12 +314,9 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                                   Provider.of<HistoryViewModel>(
                                                           context,
                                                           listen: false)
-                                                      .dispose();
+                                                      .historyController
+                                                      .close();
                                                   removeToken();
-                                                });
-                                                Future.delayed(
-                                                    const Duration(seconds: 2),
-                                                    () {
                                                   WidgetsBinding.instance
                                                       .addPostFrameCallback(
                                                           (_) {
