@@ -242,7 +242,7 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
                             } else if (widget.title == 'Lapangan Olahraga') {
                               return eventViewModel.hargaLapangan != 0
                                   ? Text(
-                                      'Rp ${formatAmount(eventViewModel.hargaAula)} / Hari',
+                                      'Rp ${formatAmount(eventViewModel.hargaLapangan)} / Hari',
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w600,

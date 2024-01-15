@@ -43,7 +43,7 @@ class BookingModel {
       noTelp: json['noTelp'],
       time: json['time'],
       dateMulai: DateTime.parse(json['dateMulai']),
-      jumlahHari: json['jumlahHari'],
+      jumlahHari: json['jumlahHari'] ?? 1,
       status: json['status'],
       totalPembayaran: json['totalPembayaran'],
       pembayaran: json['pembayaran'] != null

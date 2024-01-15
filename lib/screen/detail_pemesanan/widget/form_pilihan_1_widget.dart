@@ -38,6 +38,7 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
       ];
     } else if (widget.title == "Lapangan Olahraga") {
       eventData = eventViewModel.getEventById(9);
+      log('${eventData.perorangan}');
       options = [
         'Perorangan',
       ];
@@ -165,7 +166,6 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
               setState(
                 () {
                   options = [
-                    'Organisasi',
                     'Perorangan',
                   ];
                   selectedOption = newValue!;
