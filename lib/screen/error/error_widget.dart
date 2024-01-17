@@ -13,6 +13,7 @@ class _ErrorWidgetState extends State<ErrorWidgetScreen> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Center(
           child: Text(

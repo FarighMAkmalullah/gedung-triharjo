@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:penyewaan_gedung_triharjo/model/list_pemesanan_model.dart';
+import 'package:penyewaan_gedung_triharjo/service/list_admin_pemesanan_service.dart';
 import 'package:penyewaan_gedung_triharjo/service/list_pemesanan_service.dart';
 import 'package:rxdart/rxdart.dart';
 
-class HistoryViewModel extends ChangeNotifier {
+class ListOrderViewModel extends ChangeNotifier {
   final historyController = BehaviorSubject<List<DetailPemesananModel>>();
   late Timer timer1;
   Stream<List<DetailPemesananModel>> get historyStream =>
@@ -30,7 +31,7 @@ class HistoryViewModel extends ChangeNotifier {
   Future<void> getHistoryData() async {
     try {
       final List<DetailPemesananModel> historyData =
-          await ListPemesananService.fetchListPemesananData();
+          await ListAdminPemesananService.fetchListAdminPemesananData();
       historyController.add(historyData);
     } catch (error) {
       throw Exception('Error loading history data: $error');

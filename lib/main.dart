@@ -4,7 +4,9 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:penyewaan_gedung_triharjo/screen/bottom_bar/bottom_bar.dart';
 import 'package:penyewaan_gedung_triharjo/screen/checking_pemesanan/checking_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/dashboard/list_event_view_model.dart';
+import 'package:penyewaan_gedung_triharjo/screen/detail_list_order/detail_list_order_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
+import 'package:penyewaan_gedung_triharjo/screen/list_order/list_order_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/login/login_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/onboarding/onboarding_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/profil/provil_view_model.dart';
@@ -28,6 +30,12 @@ void main() async {
           ),
           ChangeNotifierProvider(
             create: (context) => HistoryViewModel(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => ListOrderViewModel(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => DetailListOrderViewModel(),
           ),
         ],
         child: const GedungTriharjo(),

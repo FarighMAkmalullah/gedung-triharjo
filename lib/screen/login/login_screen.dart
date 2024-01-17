@@ -166,10 +166,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                         String accessToken =
                                             res['accessToken'] ?? '';
                                         saveToken(valueToken: accessToken);
-                                        Navigator.pushNamed(
-                                          context,
-                                          '/bottom_bar',
-                                        );
+
+                                        Navigator.of(context)
+                                            .pushNamedAndRemoveUntil(
+                                                '/bottom_bar',
+                                                (route) => false);
                                       } else if (res.containsKey('error')) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
@@ -182,9 +183,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       setState(() {
                                         isLoading = false;
                                       });
-                                      Navigator.of(context)
-                                          .pushNamedAndRemoveUntil(
-                                              '/bottom_bar', (route) => false);
                                     } catch (e) {
                                       setState(() {
                                         isLoading = false;

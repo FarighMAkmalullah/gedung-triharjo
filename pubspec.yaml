@@ -88,6 +88,7 @@ flutter:
     - assets/icon/history/purchase.png
     - assets/icon/bottom_bar/home.png
     - assets/icon/bottom_bar/user.png
+    - assets/icon/bottom_bar/user_white.png
     - assets/icon/bottom_bar/history.png
     - assets/icon/bottom_bar/home_selected.png
     - assets/icon/bottom_bar/user_selected.png

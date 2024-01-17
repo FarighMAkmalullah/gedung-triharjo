@@ -48,7 +48,6 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
     countdownDuration = expiredDateTime.difference(DateTime.now());
     countdownText = formatCountdown(countdownDuration);
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      // Start timer setelah widget selesai di-build
       startTimer();
     });
     log(widget.dateMulai);
@@ -221,18 +220,19 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                         backgroundColor: const Color(0xFF2BA34C)),
                     onPressed: () {
                       String message = '''
-                        Saya ingin konfirmasi pesanan saya dengan data berikut:
-                        Nama = ${widget.nama},
-                        Email = ${widget.email},
-                        Code Booking = ${widget.bookingCode},
-                        No Whatsapp = ${widget.noTelp},
-                        Tanggal Booking = ${widget.dateMulai},
-                        Tipe Pembayaran = bri,
-                        Terima kasih...
-                        ''';
+Saya ingin konfirmasi pesanan saya dengan data berikut:
+
+Nama = ${widget.nama},
+Email = ${widget.email},
+Code Booking = ${widget.bookingCode},
+No Whatsapp = ${widget.noTelp},
+Tanggal Booking = ${widget.dateMulai},
+Tipe Pembayaran = bri,
+
+Terima kasih...''';
 
                       String whatsappLink =
-                          'https://wa.me/085875846691?text=${Uri.encodeFull(message)}';
+                          'https://wa.me/+6283836455945?text=${Uri.encodeFull(message)}';
                       launchUrl(Uri.parse(whatsappLink));
                     },
                     child: Row(

@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
 import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
+import 'package:penyewaan_gedung_triharjo/screen/list_order/list_order_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/profil/provil_view_model.dart';
 import 'package:provider/provider.dart';
 
 class ProfilScreen extends StatefulWidget {
-  const ProfilScreen({super.key});
+  final String typeUser;
+  const ProfilScreen({
+    super.key,
+    required this.typeUser,
+  });
 
   @override
   State<ProfilScreen> createState() => _ProfilScreenState();
@@ -24,7 +29,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // return Container();
     return Consumer<ProfilViewModel>(builder: (context, provider, _) {
       return FutureBuilder(
           future: detailProfilFuture,
@@ -85,9 +89,9 @@ class _ProfilScreenState extends State<ProfilScreen> {
                               const SizedBox(
                                 height: 15,
                               ),
-                              const Text(
-                                'USER',
-                                style: TextStyle(
+                              Text(
+                                widget.typeUser == 'admin' ? 'ADMIN' : 'USER',
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -188,63 +192,70 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                     const SizedBox(
                                       height: 15,
                                     ),
-                                    TextFormField(
-                                      readOnly: true,
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      controller: TextEditingController(
-                                          text: provider.detailUser?.noKTP),
-                                      decoration: const InputDecoration(
-                                        labelText: 'No KTP',
-                                        hintStyle: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 16,
-                                        ),
-                                        hintText: 'No KTP',
-                                        floatingLabelBehavior:
-                                            FloatingLabelBehavior.always,
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.black,
+                                    widget.typeUser == 'admin'
+                                        ? Container()
+                                        : TextFormField(
+                                            readOnly: true,
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            controller: TextEditingController(
+                                                text:
+                                                    provider.detailUser?.noKTP),
+                                            decoration: const InputDecoration(
+                                              labelText: 'No KTP',
+                                              hintStyle: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16,
+                                              ),
+                                              hintText: 'No KTP',
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.always,
+                                              border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              labelStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        labelStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    TextFormField(
-                                      readOnly: true,
-                                      maxLines: 5,
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      controller: TextEditingController(
-                                          text:
-                                              '${provider.detailUser?.alamatLengkap}'),
-                                      decoration: const InputDecoration(
-                                        labelText: 'Alamat',
-                                        hintStyle: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 16,
-                                        ),
-                                        hintText: 'Alamat',
-                                        floatingLabelBehavior:
-                                            FloatingLabelBehavior.always,
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.black,
+                                    widget.typeUser == 'admin'
+                                        ? Container()
+                                        : const SizedBox(
+                                            height: 15,
                                           ),
-                                        ),
-                                        labelStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
+                                    widget.typeUser == 'admin'
+                                        ? Container()
+                                        : TextFormField(
+                                            readOnly: true,
+                                            maxLines: 5,
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            controller: TextEditingController(
+                                                text:
+                                                    '${provider.detailUser?.alamatLengkap}'),
+                                            decoration: const InputDecoration(
+                                              labelText: 'Alamat',
+                                              hintStyle: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 16,
+                                              ),
+                                              hintText: 'Alamat',
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.always,
+                                              border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              labelStyle: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
                                     const SizedBox(
                                       height: 15,
                                     ),
@@ -311,11 +322,19 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                                 Future.delayed(
                                                     const Duration(seconds: 1),
                                                     () {
-                                                  Provider.of<HistoryViewModel>(
-                                                          context,
-                                                          listen: false)
-                                                      .historyController
-                                                      .close();
+                                                  widget.typeUser == 'admin'
+                                                      ? Provider.of<
+                                                                  ListOrderViewModel>(
+                                                              context,
+                                                              listen: false)
+                                                          .historyController
+                                                          .close()
+                                                      : Provider.of<
+                                                                  HistoryViewModel>(
+                                                              context,
+                                                              listen: false)
+                                                          .historyController
+                                                          .close();
                                                   removeToken();
                                                   WidgetsBinding.instance
                                                       .addPostFrameCallback(

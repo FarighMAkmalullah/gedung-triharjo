@@ -5,23 +5,25 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:penyewaan_gedung_triharjo/model/list_pemesanan_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/checking_pemesanan/checking_pemesanan_widget.dart';
+import 'package:penyewaan_gedung_triharjo/screen/detail_list_order/detail_list_order_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/error/error_widget.dart';
 import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
+import 'package:penyewaan_gedung_triharjo/screen/list_order/list_order_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/service/delete_pemesanan.dart';
 import 'package:provider/provider.dart';
 
-class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({super.key});
+class ListOrderScreen extends StatefulWidget {
+  const ListOrderScreen({super.key});
 
   @override
-  State<HistoryScreen> createState() => _HistoryScreenState();
+  State<ListOrderScreen> createState() => _ListOrderScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> {
+class _ListOrderScreenState extends State<ListOrderScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<HistoryViewModel>(context, listen: false).streamHistoryData();
+    Provider.of<ListOrderViewModel>(context, listen: false).streamHistoryData();
   }
 
   bool isLoading = false;
@@ -32,7 +34,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'History Order',
+            'List Order',
             style: TextStyle(color: Colors.white),
           ),
           centerTitle: true,
@@ -40,7 +42,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           backgroundColor: const Color(0xFF3E70F2),
         ),
         body: StreamBuilder(
-          stream: Provider.of<HistoryViewModel>(context, listen: false)
+          stream: Provider.of<ListOrderViewModel>(context, listen: false)
               .historyStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -50,7 +52,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             } else if (snapshot.hasError) {
               return Center(
                 child: ErrorWidgetScreen(onRefreshPressed: () {
-                  Provider.of<HistoryViewModel>(context, listen: false)
+                  Provider.of<ListOrderViewModel>(context, listen: false)
                       .historyStream;
                 }),
               );
@@ -91,7 +93,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Image.asset(
-                                    'assets/icon/history/purchase.png',
+                                    'assets/icon/bottom_bar/user.png',
                                     fit: BoxFit.fill,
                                     height: 50,
                                   ),
@@ -145,20 +147,29 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               Expanded(
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF3E70F2),
+                                    backgroundColor: Colors.transparent,
                                     elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      side:
+                                          const BorderSide(color: Colors.blue),
+                                    ),
                                   ),
                                   onPressed: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => CheckingPemesanan(
-                                            codeBooking:
-                                                detailHistory.bookingCode),
+                                        builder: (context) =>
+                                            DetailListOrderScreen(
+                                                codeBooking:
+                                                    detailHistory.bookingCode),
                                       ),
                                     );
                                   },
-                                  child: const Text('Lihat Detail'),
+                                  child: const Text(
+                                    'Lihat Detail',
+                                    style: TextStyle(color: Color(0xFF3E70F2)),
+                                  ),
                                 ),
                               ),
                               Visibility(
@@ -295,7 +306,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       );
                                     },
                                     child: const Text(
-                                      'Cancel',
+                                      'Hapus Pesanan',
                                       style: TextStyle(
                                         color: Color(0xFFCE1818),
                                       ),
@@ -304,6 +315,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 ),
                               ),
                             ],
+                          ),
+                          Visibility(
+                            visible: detailHistory.status != "success",
+                            child: const SizedBox(
+                              height: 5,
+                            ),
+                          ),
+                          Visibility(
+                            visible: detailHistory.status != "success",
+                            child: FractionallySizedBox(
+                              widthFactor: 1.0,
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                child: const Text('Konfirmasi Pembayaran'),
+                              ),
+                            ),
                           )
                         ],
                       ),
