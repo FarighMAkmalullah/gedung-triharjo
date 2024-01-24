@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
@@ -315,6 +317,11 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                               ),
                                               onPressed: () {
                                                 Provider.of<HistoryViewModel>(
+                                                        context,
+                                                        listen: false)
+                                                    .cancelTimer();
+
+                                                Provider.of<ListOrderViewModel>(
                                                         context,
                                                         listen: false)
                                                     .cancelTimer();

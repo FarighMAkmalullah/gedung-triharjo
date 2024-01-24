@@ -236,6 +236,25 @@ class _FormPilihan2WidgetState extends State<FormPilihan2Widget> {
           ),
         ),
         Visibility(
+          visible: selectedLangganan == 'Gedung' && selectedKeperluan != null,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                'List Fitur $selectedKeperluan',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              // ListView.builder(
+              //   itemBuilder: (context, index) {
+              //     return const Column(children: []);
+              //   },
+              // )
+            ],
+          ),
+        ),
+        Visibility(
           visible: selectedLangganan == 'Gedung',
           child: const SizedBox(
             height: 20,
@@ -460,43 +479,61 @@ class _FormPilihan2WidgetState extends State<FormPilihan2Widget> {
               onPressed: () {
                 if (selectedLangganan == 'Berlangganan') {
                   if (selectedTipeBerlangganan == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
                         content: Text(
-                      'Tipe Berlangganan Harus Diisi',
-                      style: TextStyle(color: Colors.white),
-                    )));
+                          'Tipe Berlangganan Harus Diisi',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
                   } else if (selectedTipe2 == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
                         content: Text(
-                      'Pilih Tipe Harus diisi',
-                      style: TextStyle(color: Colors.white),
-                    )));
+                          'Pilih Tipe Harus diisi',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
                   } else if (_dateController.text == '') {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
                         content: Text(
-                      'Tanggal Harus diisi',
-                      style: TextStyle(color: Colors.white),
-                    )));
+                          'Tanggal Harus diisi',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
                   } else {}
                 } else if (selectedLangganan == 'Gedung') {
                   if (selectedKeperluan == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
                         content: Text(
-                      'Pilih Keperluan Harus diisi',
-                      style: TextStyle(color: Colors.white),
-                    )));
+                          'Pilih Keperluan Harus diisi',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
                   } else if (selectedTipe == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
                         content: Text(
-                      'Pilih Tipe Harus diisi',
-                      style: TextStyle(color: Colors.white),
-                    )));
+                          'Pilih Tipe Harus diisi',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
                   } else if (_dateController.text == '') {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
                         content: Text(
-                      'Tanggal Harus diisi',
-                      style: TextStyle(color: Colors.white),
-                    )));
+                          'Tanggal Harus diisi',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
                   } else {
                     if (selectedKeperluan == 'Hajatan / pernikahan') {
                       makePemesanan(1);

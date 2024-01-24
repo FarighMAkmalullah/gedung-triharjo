@@ -1,7 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:penyewaan_gedung_triharjo/screen/detail_list_order/detail_list_order_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/error/error_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:penyewaan_gedung_triharjo/service/admin_confirmation_order_service.dart';
 
 class DetailListOrderScreen extends StatefulWidget {
   final String codeBooking;
@@ -16,6 +21,7 @@ class DetailListOrderScreen extends StatefulWidget {
 
 class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
   bool detailPemesanan = true;
+  bool isLoading = false;
   late Future detailPemesananFuture;
   @override
   void initState() {
@@ -351,6 +357,170 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Visibility(
+                          visible:
+                              provider.detailPemesanan!.status != "success",
+                          child: FractionallySizedBox(
+                            widthFactor: 1.0,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      backgroundColor: const Color(0xFF3972C8),
+                                      title: const Text(
+                                        'Konfirmasi Pemesanan',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      content: RichText(
+                                        text: TextSpan(
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                          children: <TextSpan>[
+                                            const TextSpan(
+                                              text:
+                                                  'Apakah Anda yakin ingin konformasi pesanan : \n \n',
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  'Booking Code : ${provider.detailPemesanan!.bookingCode} \n',
+                                              style: const TextStyle(
+                                                  fontSize: 16.0),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  'Event : ${provider.detailPemesanan!.event}',
+                                              style: const TextStyle(
+                                                  fontSize: 16.0),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  'Total Pembayaran : ${provider.detailPemesanan!.totalPembayaran} \n \n',
+                                              style: const TextStyle(
+                                                  fontSize: 16.0),
+                                            ),
+                                            const TextSpan(
+                                              text:
+                                                  'Anda tidak bisa hapus pesanan setelah konformasi',
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: isLoading
+                                              ? null
+                                              : () async {
+                                                  setState(() {
+                                                    isLoading = true;
+                                                  });
+                                                  log('${isLoading}');
+                                                  try {
+                                                    var res =
+                                                        await AdminConfirmationService()
+                                                            .confirmationPemesanan(
+                                                      bookingCode: int.parse(
+                                                          provider
+                                                              .detailPemesanan!
+                                                              .bookingCode),
+                                                    );
+                                                    if (res.containsKey(
+                                                            "result") &&
+                                                        res != null) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                              "Berhasil Konfirmasi Pemesanan ${provider.detailPemesanan!.bookingCode}"),
+                                                        ),
+                                                      );
+
+                                                      Navigator.pop(context);
+
+                                                      setState(() {
+                                                        isLoading = false;
+                                                      });
+                                                    } else if (res
+                                                        .containsKey("error")) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                              "${res["error"]}"),
+                                                        ),
+                                                      );
+                                                      Navigator.pop(context);
+
+                                                      setState(() {
+                                                        isLoading = false;
+                                                      });
+                                                    }
+                                                  } catch (e) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text("${e}"),
+                                                      ),
+                                                    );
+
+                                                    setState(() {
+                                                      isLoading = false;
+                                                    });
+                                                    Navigator.pop(context);
+                                                  }
+                                                },
+                                          child: isLoading
+                                              ? const Text(
+                                                  'Loading',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                )
+                                              : const Text(
+                                                  'Ya',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white),
+                                                ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            'Tidak',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.red[100],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: const Text('Konfirmasi Pembayaran'),
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
