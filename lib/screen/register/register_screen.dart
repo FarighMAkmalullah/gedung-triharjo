@@ -57,9 +57,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF0F2F6),
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: SingleChildScrollView(
+          // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             children: [
               Container(
@@ -652,12 +653,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                       ),
                                                     ),
                                                     onPressed: () {
-                                                      Navigator.pushReplacement(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                const LoginScreen(),
-                                                          ));
+                                                      Navigator.pop(context);
                                                     },
                                                     child: const Text(
                                                         'Register Ulang'),
@@ -715,8 +711,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               const SizedBox(
-                height: 140,
-              ),
+                height: 50,
+              )
             ],
           ),
         ),

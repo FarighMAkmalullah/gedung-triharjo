@@ -29,6 +29,24 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
     return formatter.format(amount);
   }
 
+  late EventViewModel _eventViewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _eventViewModel = Provider.of<EventViewModel>(context, listen: false);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _eventViewModel.gantiHargaAula(0);
+    _eventViewModel.gantiHargaLapangan(0);
+    _eventViewModel.gantiHargaGedung(0);
+    _eventViewModel.gantiTipeSesi('');
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // final eventViewModel = Provider.of<EventViewModel>(context, listen: false);
@@ -252,7 +270,7 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
                             } else {
                               return eventViewModel.hargaGedungOlahraga != 0
                                   ? Text(
-                                      'Rp ${eventViewModel.hargaGedungOlahraga} / Hari',
+                                      'Rp ${formatAmount(eventViewModel.hargaGedungOlahraga)} ${eventViewModel.tipeSesi}',
                                       style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w600,

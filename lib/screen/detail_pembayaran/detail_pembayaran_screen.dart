@@ -47,7 +47,7 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
     expiredDateTime = DateTime.parse(widget.expiryTime);
     countdownDuration = expiredDateTime.difference(DateTime.now());
     countdownText = formatCountdown(countdownDuration);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       startTimer();
     });
     log(widget.dateMulai);

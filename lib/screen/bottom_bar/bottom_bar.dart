@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:penyewaan_gedung_triharjo/screen/dashboard/dashboard_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/error/error_widget.dart';

@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
+import 'package:penyewaan_gedung_triharjo/screen/edit_profil/edit_profil_screen.dart';
 import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/list_order/list_order_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/profil/provil_view_model.dart';
@@ -275,7 +274,26 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                                   width: 3,
                                                 ),
                                               ),
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EditProfilScreen(
+                                                      email: provider
+                                                          .detailUser!.email,
+                                                      gender: provider
+                                                          .detailUser!.gender,
+                                                      namaLengkap: provider
+                                                          .detailUser!.nama,
+                                                      noKTP: provider
+                                                          .detailUser!.noKTP,
+                                                      noWhatsapp: provider
+                                                          .detailUser!.noTelp,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,

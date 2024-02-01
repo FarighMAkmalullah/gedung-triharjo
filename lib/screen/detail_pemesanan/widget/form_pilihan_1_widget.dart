@@ -25,6 +25,17 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
 
   bool isLoading = false;
 
+  List<String> data = [
+    "3/2/2024",
+    "4/2/2024",
+    "5/2/2024",
+    "6/2/2024",
+    "7/2/2024",
+    "8/2/2024",
+    "9/2/2024",
+    "10/2/2024"
+  ];
+
   DateTimeRange? selectedDateRange;
   @override
   void initState() {
@@ -127,6 +138,7 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
   Widget build(BuildContext context) {
     final eventViewModel = Provider.of<EventViewModel>(context, listen: false);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         DropdownButtonFormField(
           value: selectedOption,
@@ -214,6 +226,41 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
               borderSide: BorderSide.none,
             ),
           ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              'List Fitur ${widget.title}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            widget.title == "Aula Balai Kelurahan"
+                ? const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('- Sound System'),
+                      Text('- Kursi 100'),
+                      Text('- Meja 4'),
+                    ],
+                  )
+                : widget.title == "Lapangan Olahraga"
+                    ? const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              '- Peralatan olahraga (bola, raket, tongkat, dll)'),
+                          Text('- Tribun atau kursi untuk penonton'),
+                          Text('- Papan skor'),
+                        ],
+                      )
+                    : Container(),
+          ],
         ),
         const SizedBox(
           height: 20,

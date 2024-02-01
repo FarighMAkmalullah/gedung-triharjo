@@ -104,7 +104,7 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${provider.detailPemesanan!.nama}',
+                                    provider.detailPemesanan!.nama,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15),
@@ -427,7 +427,7 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
                                                   setState(() {
                                                     isLoading = true;
                                                   });
-                                                  log('${isLoading}');
+                                                  log('$isLoading');
                                                   try {
                                                     var res =
                                                         await AdminConfirmationService()
@@ -475,7 +475,7 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
                                                             context)
                                                         .showSnackBar(
                                                       SnackBar(
-                                                        content: Text("${e}"),
+                                                        content: Text("$e"),
                                                       ),
                                                     );
 

@@ -12,6 +12,8 @@ class EventViewModel extends ChangeNotifier {
 
   int hargaGedungOlahraga = 0;
 
+  String tipeSesi = '';
+
   List<String> options = [
     'Organisasi',
     'Warga Triharjo',
@@ -38,12 +40,30 @@ class EventViewModel extends ChangeNotifier {
 
   void gantiHargaAula(hargaGedung) {
     hargaAula = hargaGedung;
-    notifyListeners();
+    Future.microtask(() {
+      notifyListeners();
+    });
   }
 
   void gantiHargaLapangan(hargaGedung) {
     hargaLapangan = hargaGedung;
-    notifyListeners();
+    Future.microtask(() {
+      notifyListeners();
+    });
+  }
+
+  void gantiHargaGedung(hargaGedung) {
+    hargaGedungOlahraga = hargaGedung;
+    Future.microtask(() {
+      notifyListeners();
+    });
+  }
+
+  void gantiTipeSesi(tipe) {
+    tipeSesi = tipe;
+    Future.microtask(() {
+      notifyListeners();
+    });
   }
 
   void clearAllPost() {
