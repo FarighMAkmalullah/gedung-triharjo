@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:penyewaan_gedung_triharjo/screen/article/article_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ArticleWidget extends StatefulWidget {
@@ -68,14 +69,23 @@ class _ArticleWidgetState extends State<ArticleWidget> {
           const SizedBox(
             height: 20,
           ),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Artikel'),
-              Text(
-                'See All',
-                style: TextStyle(
-                  color: Color(0xFF3E70F2),
+              const Text('Artikel'),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ArticleScreen(),
+                      ));
+                },
+                child: const Text(
+                  'See All',
+                  style: TextStyle(
+                    color: Color(0xFF3E70F2),
+                  ),
                 ),
               ),
             ],
@@ -86,11 +96,6 @@ class _ArticleWidgetState extends State<ArticleWidget> {
           InkWell(
             onTap: () {
               _launchURL('https://triharjosid.slemankab.go.id/first');
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => const WebView(),
-              //     ));
             },
             child: Container(
               width: MediaQuery.of(context).size.width,

@@ -37,8 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   smooth_page_indicator: ^1.1.0
   cached_network_image: ^3.3.0
-  url_launcher: ^6.2.3
-  intl: ^0.19.0
+  url_launcher: ^6.2.4
+  intl: ^0.18.0
   calendar_date_picker2: ^0.5.3
   dio: ^5.4.0
   email_validator: ^2.1.17
@@ -47,6 +47,9 @@ dependencies:
   rxdart: ^0.27.7
   restart_app: ^1.2.1
   flutter_phoenix: ^1.1.1
+  table_calendar: ^3.0.3
+  share_plus: ^7.2.2
+  flutter_local_notifications: ^16.3.2
 
 dev_dependencies:
   flutter_test:
@@ -94,6 +97,8 @@ flutter:
     - assets/icon/bottom_bar/user_selected.png
     - assets/icon/bottom_bar/history_selected.png
     - assets/icon/detail_pemesanan/BRI.png
+    - assets/icon/detail_pemesanan/BNI.png
+    - assets/icon/detail_pemesanan/BCA.png
     - assets/icon/detail_pemesanan/whatsapp.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

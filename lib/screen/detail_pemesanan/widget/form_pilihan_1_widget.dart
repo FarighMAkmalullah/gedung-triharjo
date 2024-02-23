@@ -65,6 +65,8 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
 
   List<String> optionsBank = [
     'BRI',
+    'BNI',
+    'BCA',
   ];
 
   DateTime? startDate;
@@ -122,10 +124,10 @@ class _FormPilihan1WidgetState extends State<FormPilihan1Widget> {
       log('Response: $res');
       log('Jumlah Hari $numberOfDays');
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
-        "$e",
-        style: const TextStyle(color: Colors.white),
+        "Server Sibuk Harap Coba lagi",
+        style: TextStyle(color: Colors.white),
       )));
       log('Error during pemesanan: $e');
       setState(() {

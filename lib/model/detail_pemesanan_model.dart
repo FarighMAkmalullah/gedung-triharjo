@@ -41,7 +41,7 @@ class BookingModel {
       nama: json['nama'],
       email: json['email'],
       noTelp: json['noTelp'],
-      time: json['time'],
+      time: json['time'] ?? '',
       dateMulai: DateTime.parse(json['dateMulai']),
       jumlahHari: json['jumlahHari'] ?? 1,
       status: json['status'],

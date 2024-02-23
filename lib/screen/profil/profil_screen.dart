@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
 import 'package:penyewaan_gedung_triharjo/screen/edit_profil/edit_profil_screen.dart';
+import 'package:penyewaan_gedung_triharjo/screen/error/error_widget.dart';
 import 'package:penyewaan_gedung_triharjo/screen/history/history_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/list_order/list_order_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/profil/provil_view_model.dart';
@@ -26,6 +27,18 @@ class _ProfilScreenState extends State<ProfilScreen> {
         Provider.of<ProfilViewModel>(context, listen: false);
     detailProfilFuture = detailViewModel.getProfilDetail();
     super.initState();
+  }
+
+  String formatLine(String input) {
+    List<String> words = input.split(' ');
+
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].isNotEmpty) {
+        words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+      }
+    }
+
+    return words.join(' ');
   }
 
   @override
@@ -111,7 +124,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                       autovalidateMode:
                                           AutovalidateMode.onUserInteraction,
                                       controller: TextEditingController(
-                                          text: provider.detailUser?.nama),
+                                          text: formatLine(
+                                              provider.detailUser!.nama)),
                                       decoration: const InputDecoration(
                                         labelText: 'Nama Lengkap',
                                         hintStyle: TextStyle(
@@ -290,6 +304,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
                                                           .detailUser!.noKTP,
                                                       noWhatsapp: provider
                                                           .detailUser!.noTelp,
+                                                      typeUser: widget.typeUser,
                                                     ),
                                                   ),
                                                 );
@@ -448,9 +463,9 @@ class _ProfilScreenState extends State<ProfilScreen> {
                 ),
               );
             } else {
-              return const Center(
-                child: Text("Error"),
-              );
+              return ErrorWidgetScreen(onRefreshPressed: () {
+                provider.getProfilDetail();
+              });
             }
           });
     });

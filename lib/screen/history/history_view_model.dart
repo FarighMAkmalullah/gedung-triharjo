@@ -27,6 +27,19 @@ class HistoryViewModel extends ChangeNotifier {
     }
   }
 
+  void filterHistoryData(String keyword) {
+    final List<DetailPemesananModel> allData = historyController.value;
+    if (keyword.isEmpty) {
+      historyController.add(allData);
+    } else {
+      final List<DetailPemesananModel> filteredData = allData
+          .where((data) =>
+              data.bookingCode.toLowerCase().contains(keyword.toLowerCase()))
+          .toList();
+      historyController.add(filteredData);
+    }
+  }
+
   Future<void> getHistoryData() async {
     try {
       final List<DetailPemesananModel> historyData =

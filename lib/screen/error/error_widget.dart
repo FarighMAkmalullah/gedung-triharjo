@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 
-class ErrorWidgetScreen extends StatefulWidget {
+class ErrorWidgetScreen extends StatelessWidget {
   final VoidCallback onRefreshPressed;
   const ErrorWidgetScreen({super.key, required this.onRefreshPressed});
 
-  @override
-  State<ErrorWidgetScreen> createState() => _ErrorWidgetState();
-}
-
-class _ErrorWidgetState extends State<ErrorWidgetScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,7 +29,7 @@ class _ErrorWidgetState extends State<ErrorWidgetScreen> {
               borderRadius: BorderRadius.circular(100),
             ),
           ),
-          onPressed: widget.onRefreshPressed,
+          onPressed: onRefreshPressed,
           child: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text('Coba Lagi'),

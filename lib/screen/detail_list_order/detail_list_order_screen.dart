@@ -3,8 +3,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:penyewaan_gedung_triharjo/screen/detail_list_order/detail_list_order_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/error/error_widget.dart';
+import 'package:penyewaan_gedung_triharjo/service/delete_pemesanan.dart';
 import 'package:provider/provider.dart';
 import 'package:penyewaan_gedung_triharjo/service/admin_confirmation_order_service.dart';
 
@@ -23,6 +25,34 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
   bool detailPemesanan = true;
   bool isLoading = false;
   late Future detailPemesananFuture;
+  late List<String> dateList;
+
+  List<String> generateDateList(dateMulai, jumHar) {
+    List<String> dateList = [];
+    DateTime currentDate = DateTime.parse("$dateMulai");
+
+    for (int i = 0; i < jumHar; i++) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
+      dateList.add(formattedDate);
+
+      currentDate = currentDate.add(const Duration(days: 1));
+    }
+
+    return dateList;
+  }
+
+  String formatLine(String input) {
+    List<String> words = input.split(' ');
+
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].isNotEmpty) {
+        words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+      }
+    }
+
+    return words.join(' ');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -42,33 +72,40 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('List Pemesanan'),
+        title: const Text(
+          'List Pemesanan',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
+        backgroundColor: const Color(0xFF3E70F2),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder(
-          future: detailPemesananFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              final detailViewModel =
-                  Provider.of<DetailListOrderViewModel>(context, listen: false);
-              return Center(
-                child: ErrorWidgetScreen(onRefreshPressed: () {
-                  detailViewModel.getPemesananDetail(
-                      codeBooking: widget.codeBooking);
-                }),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              return Consumer<DetailListOrderViewModel>(
-                  builder: (context, provider, _) {
+      body: Consumer<DetailListOrderViewModel>(builder: (context, provider, _) {
+        return FutureBuilder(
+            future: detailPemesananFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: ErrorWidgetScreen(onRefreshPressed: () {
+                    provider.getPemesananDetail(
+                        codeBooking: widget.codeBooking);
+                  }),
+                );
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                dateList = generateDateList(provider.detailPemesanan!.dateMulai,
+                    provider.detailPemesanan!.jumlahHari);
                 return SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
+                        const SizedBox(
+                          height: 30,
+                        ),
                         Container(
                           padding: const EdgeInsets.all(16),
                           width: MediaQuery.of(context).size.width,
@@ -201,8 +238,8 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
                                                       vertical: 15),
                                               child: Center(
                                                 child: Text(
-                                                  provider
-                                                      .detailPemesanan!.event,
+                                                  formatLine(provider
+                                                      .detailPemesanan!.event),
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -305,23 +342,115 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
                                                 ),
                                               ],
                                             ),
-                                            const SizedBox(
-                                              height: 10,
+                                            ListView.builder(
+                                              itemCount: dateList.length,
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemBuilder: (context, index) {
+                                                return Column(
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          dateList[index],
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        const Icon(
+                                                            Icons.date_range),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                );
+                                              },
                                             ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  tanggalBooking(
-                                                      "${provider.detailPemesanan!.dateMulai}"),
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            Visibility(
+                                              visible: provider.detailPemesanan!
+                                                          .time ==
+                                                      "00:01:00" &&
+                                                  provider.detailPemesanan!
+                                                          .event ==
+                                                      "line badminton",
+                                              child: const SizedBox(
+                                                height: 10,
+                                              ),
+                                            ),
+                                            Visibility(
+                                              visible: provider.detailPemesanan!
+                                                          .time ==
+                                                      "00:01:00" &&
+                                                  provider.detailPemesanan!
+                                                          .event ==
+                                                      "line badminton",
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text("Type"),
+                                                  Text("Bulanan"),
+                                                ],
+                                              ),
+                                            ),
+                                            Visibility(
+                                              visible: provider
+                                                      .detailPemesanan!.time !=
+                                                  "00:01:00",
+                                              child: const SizedBox(
+                                                height: 10,
+                                              ),
+                                            ),
+                                            Visibility(
+                                              visible: provider
+                                                      .detailPemesanan!.time !=
+                                                  "00:01:00",
+                                              child: SizedBox(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Text(
+                                                      'Sesi',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                          provider
+                                                              .detailPemesanan!
+                                                              .time,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        const Icon(
+                                                            Icons.date_range),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
-                                                const Icon(Icons.date_range),
-                                              ],
+                                              ),
                                             ),
                                             const SizedBox(
                                               height: 10,
@@ -339,7 +468,7 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 20, horizontal: 20),
                                     decoration: const BoxDecoration(
-                                      color: Color(0xFFD9D9D9),
+                                      color: Color(0xFF3E70F2),
                                       borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(5),
                                         bottomRight: Radius.circular(5),
@@ -347,8 +476,18 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
                                     ),
                                     child: Column(
                                       children: [
-                                        const Text('Alamat'),
-                                        Text(provider.detailPemesanan!.alamat),
+                                        const Text(
+                                          'Alamat',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        Text(
+                                          provider.detailPemesanan!.alamat,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -520,23 +659,123 @@ class _DetailListOrderScreenState extends State<DetailListOrderScreen> {
                               child: const Text('Konfirmasi Pembayaran'),
                             ),
                           ),
-                        )
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Visibility(
+                          visible:
+                              provider.detailPemesanan!.status != "success",
+                          child: FractionallySizedBox(
+                            widthFactor: 1.0,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red),
+                              onPressed: () async {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                try {
+                                  var res = await Provider.of<
+                                              DetailListOrderViewModel>(context,
+                                          listen: false)
+                                      .getPemesananDetail(
+                                          codeBooking: widget.codeBooking);
+                                  if (Provider.of<DetailListOrderViewModel>(
+                                              context,
+                                              listen: false)
+                                          .detailPemesanan!
+                                          .status ==
+                                      "pending") {
+                                    try {
+                                      var res2 =
+                                          await DeleteService().deletePemesanan(
+                                        bookingCode:
+                                            int.parse(widget.codeBooking),
+                                      );
+                                      if (res2.containsKey("result") &&
+                                          res2 != null) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                                "Berhasil hapus data Pemesanan"),
+                                          ),
+                                        );
+
+                                        Navigator.pop(context);
+
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      } else if (res.containsKey("error")) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text("${res["error"]}"),
+                                          ),
+                                        );
+                                        Navigator.pop(context);
+
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      }
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text("$e"),
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            "Pembayaran sudah berhasil dilakukan, tidak bisa dihapus"),
+                                      ),
+                                    );
+                                  }
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                } catch (e) {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                }
+                              },
+                              child: isLoading == true
+                                  ? const CircularProgressIndicator()
+                                  : const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.delete),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Text('Hapus Pemesanan'),
+                                      ],
+                                    ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 );
-              });
-            } else {
-              final detailViewModel =
-                  Provider.of<DetailListOrderViewModel>(context, listen: false);
-              return Center(
-                child: ErrorWidgetScreen(onRefreshPressed: () {
-                  detailViewModel.getPemesananDetail(
-                      codeBooking: widget.codeBooking);
-                }),
-              );
-            }
-          }),
+              } else {
+                return Center(
+                  child: ErrorWidgetScreen(onRefreshPressed: () {
+                    provider.getPemesananDetail(
+                        codeBooking: widget.codeBooking);
+                  }),
+                );
+              }
+            });
+      }),
     );
   }
 }

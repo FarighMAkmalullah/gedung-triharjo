@@ -1,9 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:penyewaan_gedung_triharjo/screen/checking_pemesanan/checking_view_model.dart';
+import 'package:penyewaan_gedung_triharjo/service/delete_pemesanan.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPembayaranScreen extends StatefulWidget {
@@ -18,25 +23,33 @@ class DetailPembayaranScreen extends StatefulWidget {
   final String noTelp;
   final String dateMulai;
   final String alamat;
-  const DetailPembayaranScreen(
-      {super.key,
-      required this.vaNumber,
-      required this.expiryTime,
-      required this.bookingCode,
-      required this.totalPembayaran,
-      required this.event,
-      required this.noKTP,
-      required this.nama,
-      required this.email,
-      required this.noTelp,
-      required this.dateMulai,
-      required this.alamat});
+  final String time;
+  final int jumHar;
+  final String tipePembayaran;
+  const DetailPembayaranScreen({
+    super.key,
+    required this.vaNumber,
+    required this.expiryTime,
+    required this.bookingCode,
+    required this.totalPembayaran,
+    required this.event,
+    required this.noKTP,
+    required this.nama,
+    required this.email,
+    required this.noTelp,
+    required this.dateMulai,
+    required this.alamat,
+    required this.time,
+    required this.jumHar,
+    required this.tipePembayaran,
+  });
 
   @override
   State<DetailPembayaranScreen> createState() => _DetailPembayaranScreenState();
 }
 
 class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
+  bool isLoading = false;
   late DateTime expiredDateTime;
   late Duration countdownDuration;
   late String countdownText;
@@ -53,6 +66,32 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
     log(widget.dateMulai);
   }
 
+  List<String> generateDateList() {
+    List<String> dateList = [];
+    DateTime currentDate = DateTime.parse(widget.dateMulai);
+
+    for (int i = 0; i < widget.jumHar; i++) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
+      dateList.add(formattedDate);
+
+      currentDate = currentDate.add(const Duration(days: 1));
+    }
+
+    return dateList;
+  }
+
+  String formatLine(String input) {
+    List<String> words = input.split(' ');
+
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].isNotEmpty) {
+        words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+      }
+    }
+
+    return words.join(' ');
+  }
+
   String tanggalBooking(value) {
     DateTime dateTime = DateTime.parse(value);
     dateTime = dateTime.toLocal();
@@ -60,8 +99,8 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
   }
 
   void startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      countdownDuration = countdownDuration - Duration(seconds: 1);
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      countdownDuration = countdownDuration - const Duration(seconds: 1);
       setState(() {
         countdownText = formatCountdown(countdownDuration);
       });
@@ -86,7 +125,6 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
     super.dispose();
   }
 
-  //Bikin int jadi Currency
   String formatAmount(int amount) {
     final NumberFormat formatter = NumberFormat.decimalPattern('id');
     return formatter.format(amount);
@@ -95,6 +133,7 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
   bool detailPemesanan = true;
   @override
   Widget build(BuildContext context) {
+    List<String> dateList = generateDateList();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detail Pembayaran"),
@@ -117,7 +156,7 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                   width: 5,
                 ),
                 Text(
-                  "Menunggu Pembayaran ${countdownText}",
+                  "Menunggu Pembayaran $countdownText",
                   style: const TextStyle(color: Colors.white),
                 ),
               ],
@@ -131,7 +170,11 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                      color: const Color(0xFF00529C),
+                      color: widget.tipePembayaran == 'bri'
+                          ? const Color(0xFF00529C)
+                          : widget.tipePembayaran == 'bca'
+                              ? Colors.blue
+                              : Colors.orange,
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,8 +182,13 @@ class _DetailPembayaranScreenState extends State<DetailPembayaranScreen> {
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 20, 0, 16),
                         width: MediaQuery.of(context).size.width * 0.3,
-                        child:
-                            Image.asset('assets/icon/detail_pemesanan/BRI.png'),
+                        child: Image.asset(
+                          widget.tipePembayaran == 'bri'
+                              ? 'assets/icon/detail_pemesanan/BRI.png'
+                              : widget.tipePembayaran == 'bca'
+                                  ? 'assets/icon/detail_pemesanan/BCA.png'
+                                  : 'assets/icon/detail_pemesanan/BNI.png',
+                        ),
                       ),
                       const Text(
                         "Virtual Account Number",
@@ -308,7 +356,7 @@ Terima kasih...''';
                                           vertical: 15),
                                       child: Center(
                                         child: Text(
-                                          widget.event,
+                                          formatLine(widget.event),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
@@ -401,21 +449,92 @@ Terima kasih...''';
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 10,
+                                    ListView.builder(
+                                      itemCount: dateList.length,
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          children: [
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  dateList[index],
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                const Icon(Icons.date_range),
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          tanggalBooking(widget.dateMulai),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                    Visibility(
+                                      visible: widget.time == '' &&
+                                          widget.event == "line badminton",
+                                      child: const SizedBox(
+                                        height: 10,
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: widget.time == '' &&
+                                          widget.event == "line badminton",
+                                      child: const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Type"),
+                                          Text("Bulanan"),
+                                        ],
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: widget.time != '',
+                                      child: const SizedBox(
+                                        height: 10,
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: widget.time != '',
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Sesi',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  widget.time,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                const Icon(Icons.date_range),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        const Icon(Icons.date_range),
-                                      ],
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 10,
@@ -433,7 +552,7 @@ Terima kasih...''';
                             padding: const EdgeInsets.symmetric(
                                 vertical: 20, horizontal: 20),
                             decoration: const BoxDecoration(
-                              color: Color(0xFFD9D9D9),
+                              color: Color(0xFF3E70F2),
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(5),
                                 bottomRight: Radius.circular(5),
@@ -441,8 +560,18 @@ Terima kasih...''';
                             ),
                             child: Column(
                               children: [
-                                const Text('Alamat'),
-                                Text(widget.alamat),
+                                const Text(
+                                  'Alamat',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  widget.alamat,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -451,9 +580,98 @@ Terima kasih...''';
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
+                FractionallySizedBox(
+                  widthFactor: 1.0,
+                  child: ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      try {
+                        var res = await Provider.of<PemesananViewModel>(context,
+                                listen: false)
+                            .getPemesananDetail(
+                                codeBooking: widget.bookingCode);
+                        if (Provider.of<PemesananViewModel>(context,
+                                    listen: false)
+                                .detailPemesanan!
+                                .status ==
+                            "pending") {
+                          try {
+                            var res2 = await DeleteService().deletePemesanan(
+                              bookingCode: int.parse(widget.bookingCode),
+                            );
+                            if (res2.containsKey("result") && res2 != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text("Berhasil hapus data Pemesanan"),
+                                ),
+                              );
+
+                              Navigator.pop(context);
+
+                              setState(() {
+                                isLoading = false;
+                              });
+                            } else if (res.containsKey("error")) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("${res["error"]}"),
+                                ),
+                              );
+                              Navigator.pop(context);
+
+                              setState(() {
+                                isLoading = false;
+                              });
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("$e"),
+                              ),
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  "Pembayaran sudah berhasil dilakukan, tidak bisa dihapus"),
+                            ),
+                          );
+                        }
+                        setState(() {
+                          isLoading = false;
+                        });
+                      } catch (e) {
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    },
+                    child: isLoading == true
+                        ? const CircularProgressIndicator()
+                        : const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.delete),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              Text('Hapus Pemesanan'),
+                            ],
+                          ),
+                  ),
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

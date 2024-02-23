@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:developer';
 import 'package:penyewaan_gedung_triharjo/const/init/const/api.dart';
 import 'package:dio/dio.dart';
 
@@ -18,6 +18,7 @@ class LoginService {
       );
       return response.data;
     } on DioException catch (e) {
+      log('$e');
       return e.response?.data;
     }
   }

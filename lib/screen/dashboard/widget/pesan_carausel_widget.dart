@@ -164,15 +164,16 @@ class _PesanCarauselWidgetState extends State<PesanCarauselWidget> {
                               child: ElevatedButton(
                                   onPressed: () {
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              DetailPemesananScreen(
-                                            title: list?[index]['title'],
-                                            imageAssets: list?[index]['image'],
-                                            listSyarat: list?[index]['syarat'],
-                                          ),
-                                        ));
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            DetailPemesananScreen(
+                                          title: list?[index]['title'],
+                                          imageAssets: list?[index]['image'],
+                                          listSyarat: list?[index]['syarat'],
+                                        ),
+                                      ),
+                                    );
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,

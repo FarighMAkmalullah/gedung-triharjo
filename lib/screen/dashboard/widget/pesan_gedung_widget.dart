@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:penyewaan_gedung_triharjo/screen/dashboard/widget/pesan_carausel_widget.dart';
+import 'package:penyewaan_gedung_triharjo/screen/dashboard/widget/pesan_grid_widget.dart';
+import 'package:penyewaan_gedung_triharjo/screen/dashboard/widget/pesan_list_widget.dart';
+import 'package:penyewaan_gedung_triharjo/screen/list_harga/list_harga_screen.dart';
 
 class PesanGedungWidget extends StatefulWidget {
   const PesanGedungWidget({super.key});
@@ -16,13 +19,13 @@ class _PesanGedungWidgetState extends State<PesanGedungWidget> {
       case 1:
         return const PesanCarauselWidget();
       case 2:
-        return const Center(
-          child: Text("List"),
-        );
+        return const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: PesanGridWidget());
       case 3:
-        return const Center(
-          child: Text("Grid"),
-        );
+        return const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: PesanListWidget());
       default:
         return Container();
     }
@@ -35,31 +38,39 @@ class _PesanGedungWidgetState extends State<PesanGedungWidget> {
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Pesan Gedung',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      "List Harga",
-                      style: TextStyle(
-                        color: Color(0xFF3E70F2),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ListHargaScreen()));
+                  },
+                  child: const Row(
+                    children: [
+                      Text(
+                        "List Harga",
+                        style: TextStyle(
+                          color: Color(0xFF3E70F2),
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.chevron_right,
-                      color: Color(0xFF3E70F2),
-                    )
-                  ],
+                      Icon(
+                        Icons.chevron_right,
+                        color: Color(0xFF3E70F2),
+                      )
+                    ],
+                  ),
                 )
               ],
             ),

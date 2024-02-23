@@ -1,1 +1,1 @@
-String triharjoAPI = 'https://gtr.situsweb.dev';
+String triharjoAPI = 'https://gtrproject.vercel.app';

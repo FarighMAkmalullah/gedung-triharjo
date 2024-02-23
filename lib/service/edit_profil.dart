@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:penyewaan_gedung_triharjo/const/init/const/api.dart';
 import 'package:dio/dio.dart';
+import 'package:penyewaan_gedung_triharjo/const/init/untils/shared_preference.dart';
 
 class EditProfilService {
   Future postEditProfil({
@@ -16,11 +18,14 @@ class EditProfilService {
     required String password,
     required String noTelp,
   }) async {
+    String? token = await getToken();
     try {
       Response response = await Dio().put(
         '$triharjoAPI/user',
         options: Options(headers: {
+          "accept": "application/json",
           "Content-Type": 'application/json',
+          "Authorization": "Bearer $token",
         }),
         data: json.encode({
           "nama": name,
@@ -38,6 +43,7 @@ class EditProfilService {
       );
       return response.data;
     } on DioException catch (e) {
+      log("$e");
       return e.response?.data;
     }
   }

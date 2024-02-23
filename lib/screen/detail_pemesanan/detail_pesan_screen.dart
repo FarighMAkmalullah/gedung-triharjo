@@ -3,7 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:penyewaan_gedung_triharjo/screen/dashboard/list_event_view_model.dart';
 import 'package:penyewaan_gedung_triharjo/screen/detail_pemesanan/widget/form_pilihan_1_widget.dart';
 import 'package:penyewaan_gedung_triharjo/screen/detail_pemesanan/widget/form_pilihan_2_widget.dart';
+import 'package:penyewaan_gedung_triharjo/screen/list_harga/list_harga_screen.dart';
+import 'package:penyewaan_gedung_triharjo/screen/list_jadwal/list_jadwal2_screen.dart';
+import 'package:penyewaan_gedung_triharjo/screen/list_jadwal/list_jadwal_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart';
 
 class DetailPemesananScreen extends StatefulWidget {
   final String imageAssets;
@@ -39,7 +44,6 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _eventViewModel.gantiHargaAula(0);
     _eventViewModel.gantiHargaLapangan(0);
     _eventViewModel.gantiHargaGedung(0);
@@ -49,7 +53,6 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final eventViewModel = Provider.of<EventViewModel>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -98,17 +101,23 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
                                 ),
                               ),
                             ),
-                            Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(200),
-                                color: Colors.black38,
-                              ),
-                              child: const Center(
-                                child: Icon(
-                                  Icons.share,
-                                  color: Colors.white,
+                            InkWell(
+                              onTap: () {
+                                Share.share(
+                                    "'Dapatkan pengalaman yang tak terlupakan dengan menyewa gedung kami di Triharjo! Penawaran spesial menanti Anda. Segera pesan sekarang untuk merayakan momen istimewa Anda'");
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(200),
+                                  color: Colors.black38,
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.share,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
@@ -152,19 +161,28 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
                             fontSize: 20,
                           ),
                         ),
-                        const Row(
-                          children: [
-                            Text(
-                              "List Harga",
-                              style: TextStyle(
-                                color: Color(0xFF3E70F2),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ListHargaScreen()));
+                          },
+                          child: const Row(
+                            children: [
+                              Text(
+                                "List Harga",
+                                style: TextStyle(
+                                  color: Color(0xFF3E70F2),
+                                ),
                               ),
-                            ),
-                            Icon(
-                              Icons.chevron_right,
-                              color: Color(0xFF3E70F2),
-                            )
-                          ],
+                              Icon(
+                                Icons.chevron_right,
+                                color: Color(0xFF3E70F2),
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -292,49 +310,65 @@ class _DetailPemesananScreenState extends State<DetailPemesananScreen> {
                     const SizedBox(
                       height: 20,
                     ),
+                    InkWell(
+                      onTap: () {
+                        widget.title != 'Gedung Olahraga'
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ListJadwalScreen(
+                                    title: widget.title,
+                                  ),
+                                ),
+                              )
+                            : Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ListJadwal2Screen(),
+                                ),
+                              );
+                      },
+                      child: const Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Tanggal yang sudah dipesan',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(Icons.date_range),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Color(0xFFA9A9A9),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     widget.title == 'Gedung Olahraga'
                         ? const FormPilihan2Widget()
                         : FormPilihan1Widget(
                             title: widget.title,
                           ),
                     const SizedBox(
-                      height: 25,
+                      height: 30,
                     ),
                   ],
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 45),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Tanggal yang sudah dipesan',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('29-30 Desember'),
-                          Divider(
-                            color: Colors.black,
-                          ),
-                        ],
-                      );
-                    },
-                  )
-                ],
-              ),
-            )
           ],
         ),
       ),

@@ -86,6 +86,8 @@ class _FormPilihan2WidgetState extends State<FormPilihan2Widget> {
 
   List<String> optionsBank = [
     'BRI',
+    'BNI',
+    'BCA',
   ];
 
   String selectedBank = 'BRI';
@@ -806,9 +808,10 @@ class _FormPilihan2WidgetState extends State<FormPilihan2Widget> {
           height: 20,
         ),
         Visibility(
-          visible: selectedLangganan == 'Berlangganan' &&
-                  selectedTipeBerlangganan == 'Line Badminton Sesi' ||
-              selectedTipeBerlangganan == 'Unit 1 Gedung Sesi',
+          visible: (selectedLangganan == 'Berlangganan' &&
+                  selectedTipeBerlangganan == 'Line Badminton Sesi') ||
+              (selectedLangganan == 'Berlangganan' &&
+                  selectedTipeBerlangganan == 'Unit 1 Gedung Sesi'),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -837,17 +840,19 @@ class _FormPilihan2WidgetState extends State<FormPilihan2Widget> {
           ),
         ),
         Visibility(
-          visible: selectedLangganan == 'Berlangganan' &&
-                  selectedTipeBerlangganan == 'Line Badminton Sesi' ||
-              selectedTipeBerlangganan == 'Unit 1 Gedung Sesi',
+          visible: (selectedLangganan == 'Berlangganan' &&
+                  selectedTipeBerlangganan == 'Line Badminton Sesi') ||
+              (selectedLangganan == 'Berlangganan' &&
+                  selectedTipeBerlangganan == 'Unit 1 Gedung Sesi'),
           child: const SizedBox(
             height: 20,
           ),
         ),
         Visibility(
-          visible: selectedLangganan == 'Berlangganan' &&
-                  selectedTipeBerlangganan == 'Line Badminton Sesi' ||
-              selectedTipeBerlangganan == 'Unit 1 Gedung Sesi',
+          visible: (selectedLangganan == 'Berlangganan' &&
+                  selectedTipeBerlangganan == 'Line Badminton Sesi') ||
+              (selectedLangganan == 'Berlangganan' &&
+                  selectedTipeBerlangganan == 'Unit 1 Gedung Sesi'),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -101,6 +101,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 5,
+              ),
+              const Center(
+                child: Text(
+                  'Created by Nisa Ustnia',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

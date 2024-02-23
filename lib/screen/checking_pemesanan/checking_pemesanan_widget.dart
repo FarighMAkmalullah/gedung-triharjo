@@ -27,92 +27,93 @@ class _CheckingPemesananState extends State<CheckingPemesanan> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: detailPemesananFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else if (snapshot.hasError) {
-          log("${snapshot.error}");
-          final detailViewModel =
-              Provider.of<PemesananViewModel>(context, listen: false);
-          return Scaffold(
-            body: Center(
-              child: ErrorWidgetScreen(onRefreshPressed: () {
-                detailViewModel.getPemesananDetail(
-                    codeBooking: widget.codeBooking);
-              }),
-            ),
-          );
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          return Consumer<PemesananViewModel>(
-            builder: (context, provider, child) {
-              if (provider.detailPemesanan?.status == "pending" &&
-                  provider.detailPemesanan!.pembayaran != null) {
-                return DetailPembayaranScreen(
-                  vaNumber: provider.detailPemesanan!.pembayaran!.vaNumber,
-                  expiryTime:
-                      "${provider.detailPemesanan!.pembayaran!.expiryTime}",
-                  bookingCode: provider.detailPemesanan!.bookingCode,
-                  totalPembayaran:
-                      "${provider.detailPemesanan!.totalPembayaran}",
-                  event: provider.detailPemesanan!.event,
-                  noKTP: provider.detailPemesanan!.noKTP,
-                  nama: provider.detailPemesanan!.nama,
-                  email: provider.detailPemesanan!.email,
-                  noTelp: provider.detailPemesanan!.noTelp,
-                  dateMulai: "${provider.detailPemesanan!.dateMulai}",
-                  alamat: provider.detailPemesanan!.alamat,
-                );
-              } else if (provider.detailPemesanan!.status == "success") {
-                log(provider.detailPemesanan!.status);
-                return DetailPemesananBerhasil(
-                  bookingCode: provider.detailPemesanan!.bookingCode,
-                  totalPembayaran:
-                      "${provider.detailPemesanan!.totalPembayaran}",
-                  event: provider.detailPemesanan!.event,
-                  noKTP: provider.detailPemesanan!.noKTP,
-                  nama: provider.detailPemesanan!.nama,
-                  email: provider.detailPemesanan!.email,
-                  noTelp: provider.detailPemesanan!.noTelp,
-                  dateMulai: "${provider.detailPemesanan!.dateMulai}",
-                  alamat: provider.detailPemesanan!.alamat,
-                );
-              } else {
-                log(provider.detailPemesanan!.status);
-                final detailViewModel =
-                    Provider.of<PemesananViewModel>(context, listen: false);
-                return Scaffold(
-                  body: Center(
-                    child: ErrorWidgetScreen(
-                      onRefreshPressed: () {
-                        detailViewModel.getPemesananDetail(
-                            codeBooking: widget.codeBooking);
-                      },
+    return Consumer<PemesananViewModel>(builder: (context, provider, _) {
+      return FutureBuilder(
+        future: detailPemesananFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Scaffold(
+              body: Center(
+                child: ErrorWidgetScreen(onRefreshPressed: () {
+                  provider.getPemesananDetail(codeBooking: widget.codeBooking);
+                }),
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return Consumer<PemesananViewModel>(
+              builder: (context, provider, child) {
+                if (provider.detailPemesanan?.status == "pending" &&
+                    provider.detailPemesanan!.pembayaran != null) {
+                  return DetailPembayaranScreen(
+                    vaNumber: provider.detailPemesanan!.pembayaran!.vaNumber,
+                    expiryTime:
+                        "${provider.detailPemesanan!.pembayaran!.expiryTime}",
+                    bookingCode: provider.detailPemesanan!.bookingCode,
+                    totalPembayaran:
+                        "${provider.detailPemesanan!.totalPembayaran}",
+                    event: provider.detailPemesanan!.event,
+                    noKTP: provider.detailPemesanan!.noKTP,
+                    nama: provider.detailPemesanan!.nama,
+                    email: provider.detailPemesanan!.email,
+                    noTelp: provider.detailPemesanan!.noTelp,
+                    dateMulai: "${provider.detailPemesanan!.dateMulai}",
+                    alamat: provider.detailPemesanan!.alamat,
+                    time: provider.detailPemesanan!.time == "00:01:00"
+                        ? ''
+                        : provider.detailPemesanan!.time,
+                    jumHar: provider.detailPemesanan!.jumlahHari,
+                    tipePembayaran:
+                        provider.detailPemesanan!.pembayaran!.tipePembayaran,
+                  );
+                } else if (provider.detailPemesanan!.status == "success") {
+                  log(provider.detailPemesanan!.status);
+                  return DetailPemesananBerhasil(
+                    bookingCode: provider.detailPemesanan!.bookingCode,
+                    totalPembayaran:
+                        "${provider.detailPemesanan!.totalPembayaran}",
+                    event: provider.detailPemesanan!.event,
+                    noKTP: provider.detailPemesanan!.noKTP,
+                    nama: provider.detailPemesanan!.nama,
+                    email: provider.detailPemesanan!.email,
+                    noTelp: provider.detailPemesanan!.noTelp,
+                    dateMulai: "${provider.detailPemesanan!.dateMulai}",
+                    alamat: provider.detailPemesanan!.alamat,
+                    time: provider.detailPemesanan!.time == "00:01:00"
+                        ? ''
+                        : provider.detailPemesanan!.time,
+                    jumHar: provider.detailPemesanan!.jumlahHari,
+                  );
+                } else {
+                  return Scaffold(
+                    body: Center(
+                      child: ErrorWidgetScreen(
+                        onRefreshPressed: () {
+                          provider.getPemesananDetail(
+                              codeBooking: widget.codeBooking);
+                        },
+                      ),
                     ),
-                  ),
-                );
-              }
-            },
-          );
-        } else {
-          final detailViewModel =
-              Provider.of<PemesananViewModel>(context, listen: false);
-          log(detailViewModel.detailPemesanan!.status);
-          return Scaffold(
-            body: Center(
-              child: ErrorWidgetScreen(onRefreshPressed: () {
-                detailViewModel.getPemesananDetail(
-                    codeBooking: widget.codeBooking);
-              }),
-            ),
-          );
-        }
-      },
-    );
+                  );
+                }
+              },
+            );
+          } else {
+            return Scaffold(
+              body: Center(
+                child: ErrorWidgetScreen(onRefreshPressed: () {
+                  provider.getPemesananDetail(codeBooking: widget.codeBooking);
+                }),
+              ),
+            );
+          }
+        },
+      );
+    });
   }
 }

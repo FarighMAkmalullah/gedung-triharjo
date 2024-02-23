@@ -11,6 +11,8 @@ class DetailPemesananBerhasil extends StatefulWidget {
   final String dateMulai;
   final String alamat;
   final String bookingCode;
+  final String time;
+  final int jumHar;
   const DetailPemesananBerhasil({
     super.key,
     required this.totalPembayaran,
@@ -22,6 +24,8 @@ class DetailPemesananBerhasil extends StatefulWidget {
     required this.dateMulai,
     required this.alamat,
     required this.bookingCode,
+    required this.time,
+    required this.jumHar,
   });
 
   @override
@@ -44,8 +48,35 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
     return formatter.format(amount);
   }
 
+  List<String> generateDateList() {
+    List<String> dateList = [];
+    DateTime currentDate = DateTime.parse(widget.dateMulai);
+
+    for (int i = 0; i < widget.jumHar; i++) {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
+      dateList.add(formattedDate);
+
+      currentDate = currentDate.add(const Duration(days: 1));
+    }
+
+    return dateList;
+  }
+
+  String formatLine(String input) {
+    List<String> words = input.split(' ');
+
+    for (int i = 0; i < words.length; i++) {
+      if (words[i].isNotEmpty) {
+        words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+      }
+    }
+
+    return words.join(' ');
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<String> dateList = generateDateList();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detail Pemesanan"),
@@ -54,7 +85,7 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
       body: ListView(
         children: [
           const SizedBox(
-            height: 16,
+            height: 40,
           ),
           Image.asset(
             'assets/image/success/succes.png',
@@ -154,7 +185,7 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
                                       const EdgeInsets.symmetric(vertical: 15),
                                   child: Center(
                                     child: Text(
-                                      widget.event,
+                                      formatLine(widget.event),
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16),
@@ -245,21 +276,88 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
                                     ),
                                   ],
                                 ),
-                                const SizedBox(
-                                  height: 10,
+                                ListView.builder(
+                                  itemCount: dateList.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              dateList[index],
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const Icon(Icons.date_range),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      tanggalBooking(widget.dateMulai),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                Visibility(
+                                  visible: widget.time == '' &&
+                                      widget.event == "line badminton",
+                                  child: const SizedBox(
+                                    height: 10,
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: widget.time == '' &&
+                                      widget.event == "line badminton",
+                                  child: const Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Type"),
+                                      Text("Bulanan"),
+                                    ],
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: widget.time != '',
+                                  child: const SizedBox(
+                                    height: 10,
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: widget.time != '',
+                                  child: SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          'Sesi',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              widget.time,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const Icon(Icons.date_range),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                    const Icon(Icons.date_range),
-                                  ],
+                                  ),
                                 ),
                                 const SizedBox(
                                   height: 10,
@@ -277,7 +375,7 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 20),
                         decoration: const BoxDecoration(
-                          color: Color(0xFFD9D9D9),
+                          color: Color(0xFF3E70F2),
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(5),
                             bottomRight: Radius.circular(5),
@@ -285,8 +383,18 @@ class _DetailPemesananBerhasilState extends State<DetailPemesananBerhasil> {
                         ),
                         child: Column(
                           children: [
-                            const Text('Alamat'),
-                            Text(widget.alamat),
+                            const Text(
+                              'Alamat',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              widget.alamat,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                           ],
                         ),
                       ),
